@@ -193,6 +193,26 @@ export async function POST(req: Request) {
       },
     });
 
+    // 8. Upsert LogGroup for the log fingerprint
+    if (fingerprint) {
+      await db.logGroup.upsert({
+        where: { fingerprint },
+        update: {
+          count: { increment: 1 },
+          lastSeen: new Date(),
+          resolved: false, // If the error occurs again, ensure it is set to unresolved
+        },
+        create: {
+          fingerprint,
+          projectId: activeProject.id,
+          count: 1,
+          firstSeen: new Date(),
+          lastSeen: new Date(),
+          resolved: false,
+        },
+      });
+    }
+
     return NextResponse.json(
       {
         id: log.id,

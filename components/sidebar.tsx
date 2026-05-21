@@ -8,7 +8,8 @@ import {
   Terminal, 
   Settings, 
   FolderGit2, 
-  ChevronRight 
+  ChevronRight,
+  AlertTriangle
 } from "lucide-react";
 
 const navItems = [
@@ -23,6 +24,12 @@ const navItems = [
     href: "/dashboard/logs",
     icon: Terminal,
     description: "Real-time event stream",
+  },
+  {
+    name: "Errors",
+    href: "/dashboard/errors",
+    icon: AlertTriangle,
+    description: "Grouped error signatures",
   },
   {
     name: "Settings",

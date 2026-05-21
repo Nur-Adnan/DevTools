@@ -156,3 +156,42 @@ export async function deleteProject(projectId: unknown) {
 
   return { success: true };
 }
+
+const fingerprintSchema = z.string().length(64, { message: "Invalid fingerprint format." });
+
+/**
+ * Marks a log group (by fingerprint) as resolved/unresolved.
+ */
+export async function toggleResolveLogGroup(
+  projectId: unknown,
+  fingerprint: unknown,
+  resolved: unknown
+) {
+  const userId = await getAuthSession();
+
+  // Zod Input Validation
+  const validatedProjectId = projectIdSchema.parse(projectId);
+  const validatedFingerprint = fingerprintSchema.parse(fingerprint);
+  const validatedResolved = z.boolean().parse(resolved);
+
+  // Ensure user owns this project
+  const project = await db.project.findFirst({
+    where: { id: validatedProjectId, userId },
+  });
+
+  if (!project) {
+    throw new Error("Project not found or access denied.");
+  }
+
+  // Update the log group resolved status
+  await db.logGroup.update({
+    where: { fingerprint: validatedFingerprint },
+    data: { resolved: validatedResolved },
+  });
+
+  revalidatePath(`/dashboard/${validatedProjectId}/errors`);
+  revalidatePath(`/dashboard/${validatedProjectId}/logs`);
+
+  return { success: true };
+}
+
