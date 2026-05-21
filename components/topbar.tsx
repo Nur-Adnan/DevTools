@@ -10,39 +10,65 @@ import {
 } from "@/components/ui/select";
 import { Plus, Bell, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
-export function Topbar() {
+interface TopbarProps {
+  projects: Array<{ id: string; name: string }>;
+  activeProjectId?: string;
+}
+
+export function Topbar({ projects = [], activeProjectId }: TopbarProps) {
+  const router = useRouter();
+
+  // Handle Project Switching
+  const handleProjectChange = (projectId: string | null) => {
+    if (!projectId) return;
+    // Set sticky cookie for active project
+    document.cookie = `activeProjectId=${projectId}; path=/; max-age=31536000; SameSite=Lax`;
+    
+    // Refresh page / router to load dynamic project statistics
+    router.refresh();
+  };
+
   return (
     <header className="fixed top-0 right-0 left-64 z-10 flex h-16 items-center justify-between border-b border-border/40 bg-[#09090b]/80 backdrop-blur-md px-6">
       {/* Project Switcher & Navigation */}
       <div className="flex items-center gap-4">
-        <Select defaultValue="pulseguard-prod">
-          <SelectTrigger className="w-56 bg-neutral-900/40 border-border/40 hover:bg-neutral-900/60 focus:ring-1 focus:ring-primary h-9 text-xs">
-            <SelectValue placeholder="Select Project" />
-          </SelectTrigger>
-          <SelectContent className="bg-neutral-950 border-neutral-800 text-neutral-200">
-            <SelectItem value="pulseguard-prod" className="hover:bg-neutral-900 text-xs">
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                pulseguard-prod
-              </span>
-            </SelectItem>
-            <SelectItem value="mystore-api" className="hover:bg-neutral-900 text-xs">
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                mystore-api
-              </span>
-            </SelectItem>
-            <SelectItem value="blog-app" className="hover:bg-neutral-900 text-xs">
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                blog-app (staging)
-              </span>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        {projects.length > 0 ? (
+          <Select 
+            value={activeProjectId} 
+            onValueChange={handleProjectChange}
+          >
+            <SelectTrigger className="w-56 bg-neutral-900/40 border-border/40 hover:bg-neutral-900/60 focus:ring-1 focus:ring-primary h-9 text-xs">
+              <SelectValue placeholder="Select Project" />
+            </SelectTrigger>
+            <SelectContent className="bg-neutral-950 border-neutral-800 text-neutral-200">
+              {projects.map((proj) => (
+                <SelectItem 
+                  key={proj.id} 
+                  value={proj.id} 
+                  className="hover:bg-neutral-900 text-xs cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    {proj.name}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : (
+          <div className="text-xs text-neutral-500 italic bg-neutral-900/20 border border-neutral-800/40 px-3 py-1.5 rounded-md">
+            No projects found
+          </div>
+        )}
 
-        <Button variant="ghost" size="sm" className="h-9 px-2 hover:bg-neutral-900 border border-transparent hover:border-neutral-800/60">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-9 px-2 hover:bg-neutral-900 border border-transparent hover:border-neutral-800/60"
+          onClick={() => router.push("/dashboard?create=true")}
+        >
           <Plus className="h-4 w-4 mr-1 text-neutral-400" />
           <span className="text-xs font-medium text-neutral-300">New Project</span>
         </Button>
