@@ -3,8 +3,31 @@ import { db } from "@/lib/db";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-// 1. Zod Validation Schema matching Prisma LogType enum
+// Initialize Upstash Redis rate limiter if environment variables are present
+let ratelimit: Ratelimit | null = null;
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+if (redisUrl && redisToken) {
+  ratelimit = new Ratelimit({
+    redis: new Redis({
+      url: redisUrl,
+      token: redisToken,
+    }),
+    limiter: Ratelimit.slidingWindow(100, "60 s"),
+    analytics: true,
+    prefix: "@upstash/ratelimit",
+  });
+} else {
+  console.warn(
+    "⚠️ Upstash Redis rate limiting is bypassed. Configure UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN to enable security controls."
+  );
+}
+
+// Zod Validation Schema matching Prisma LogType enum
 const ingestSchema = z.object({
   type: z.enum(["INFO", "WARN", "ERROR"]),
   message: z.string().min(1, "Message is required"),
@@ -15,7 +38,7 @@ const ingestSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    // 2. Validate Authorization: Bearer <api_key> header presence
+    // 1. Validate Authorization: Bearer <api_key> header presence
     const authHeader = req.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -25,24 +48,90 @@ export async function POST(req: Request) {
     }
     const apiKey = authHeader.substring(7);
 
-    // 3. Fetch all projects and look up matching project using parallel bcrypt comparison
-    const projects = await db.project.findMany({
+    // 2. Upstash Redis Rate Limiting (100 requests / minute)
+    if (ratelimit) {
+      try {
+        const { success, limit, reset, remaining } = await ratelimit.limit(apiKey);
+        if (!success) {
+          return NextResponse.json(
+            { error: "Too Many Requests: Rate limit exceeded (100 req/min)" },
+            {
+              status: 429,
+              headers: {
+                "X-RateLimit-Limit": limit.toString(),
+                "X-RateLimit-Remaining": remaining.toString(),
+                "X-RateLimit-Reset": reset.toString(),
+              },
+            }
+          );
+        }
+      } catch (err) {
+        // Fail-safe: Log error but allow ingestion if Redis is temporarily unreachable
+        console.error("Rate limiting pipeline warning:", err);
+      }
+    }
+
+    // 3. Timing-Safe API Key Lookup
+    const hashedKey = crypto.createHash("sha256").update(apiKey).digest("hex");
+    
+    // Indexed lookup by unique key
+    let activeProject = await db.project.findUnique({
+      where: { hashedApiKey: hashedKey },
       select: {
         id: true,
         hashedApiKey: true,
       },
     });
 
-    const comparisonChecks = await Promise.all(
-      projects.map(async (project) => {
-        const isMatch = await bcrypt.compare(apiKey, project.hashedApiKey);
-        return isMatch ? project : null;
-      })
-    );
+    let isMatch = false;
 
-    const activeProject = comparisonChecks.find((p) => p !== null);
+    if (activeProject) {
+      // Constant-time timing-safe comparison on equal-length SHA256 hashes
+      const inputBuffer = Buffer.from(hashedKey, "hex");
+      const dbBuffer = Buffer.from(activeProject.hashedApiKey, "hex");
+      isMatch = crypto.timingSafeEqual(inputBuffer, dbBuffer);
+    } else {
+      // Execute dummy comparison of identical length to prevent timing attacks
+      const dummyBuffer = Buffer.from(hashedKey, "hex");
+      crypto.timingSafeEqual(dummyBuffer, dummyBuffer);
 
-    if (!activeProject) {
+      // Backwards-Compatibility Fallback: Check old Bcrypt hashes
+      const projects = await db.project.findMany({
+        select: {
+          id: true,
+          hashedApiKey: true,
+        },
+      });
+
+      const comparisonChecks = await Promise.all(
+        projects.map(async (project) => {
+          if (project.hashedApiKey.startsWith("$2")) {
+            const ok = await bcrypt.compare(apiKey, project.hashedApiKey);
+            return ok ? project : null;
+          }
+          return null;
+        })
+      );
+
+      const oldProjectMatch = comparisonChecks.find((p) => p !== null);
+      if (oldProjectMatch) {
+        activeProject = oldProjectMatch;
+        isMatch = true;
+
+        // Auto-upgrade old Bcrypt hash to indexed timing-safe SHA256 hash
+        try {
+          await db.project.update({
+            where: { id: oldProjectMatch.id },
+            data: { hashedApiKey: hashedKey },
+          });
+          console.log(`Successfully migrated API key to timing-safe SHA256 for project: ${oldProjectMatch.id}`);
+        } catch (upgradeErr) {
+          console.error("Failed to automatically upgrade API key to SHA256:", upgradeErr);
+        }
+      }
+    }
+
+    if (!isMatch || !activeProject) {
       return NextResponse.json(
         { error: "Unauthorized: Invalid API key" },
         { status: 401 }
@@ -71,8 +160,19 @@ export async function POST(req: Request) {
 
     const { type, message, stackTrace, metadata, source } = validationResult.data;
 
-    // 5. Compute SHA256 Fingerprint for error grouping
-    // Formula: sha256(type + message + first line of stackTrace)
+    // 5. Metadata Size Sanitization (Reject payloads over 10KB)
+    if (metadata) {
+      const metadataStr = JSON.stringify(metadata);
+      const byteSize = Buffer.byteLength(metadataStr, "utf-8");
+      if (byteSize > 10 * 1024) {
+        return NextResponse.json(
+          { error: "Bad Request: Metadata payload size exceeds 10KB limit" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // 6. Compute SHA256 Fingerprint for error grouping
     const firstLineOfStack = stackTrace ? stackTrace.trim().split("\n")[0] || "" : "";
     const fingerprintInput = `${type}${message}${firstLineOfStack}`;
     const fingerprint = crypto
@@ -80,7 +180,7 @@ export async function POST(req: Request) {
       .update(fingerprintInput)
       .digest("hex");
 
-    // 6. Save log in Neon PostgreSQL database
+    // 7. Save log in Neon PostgreSQL database
     const log = await db.log.create({
       data: {
         projectId: activeProject.id,
@@ -93,7 +193,6 @@ export async function POST(req: Request) {
       },
     });
 
-    // 7. Return response on success
     return NextResponse.json(
       {
         id: log.id,

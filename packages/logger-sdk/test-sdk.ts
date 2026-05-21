@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import dotenv from "dotenv";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { createLogger } from "./src/index";
 
@@ -32,7 +33,7 @@ async function run() {
 
     // 2. Upsert a project specifically for this SDK integration test
     const rawApiKey = "pg_live_testing_sdk_api_key_1234567890";
-    const hashedApiKey = bcrypt.hashSync(rawApiKey, 10);
+    const hashedApiKey = crypto.createHash("sha256").update(rawApiKey).digest("hex");
 
     let project = await prisma.project.findFirst({
       where: { name: "SDK Integration Test" },

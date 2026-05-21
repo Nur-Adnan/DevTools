@@ -4,7 +4,18 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import crypto from "crypto";
-import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+// Zod validation schemas
+const nameSchema = z
+  .string()
+  .min(1, { message: "Project name is required." })
+  .max(100, { message: "Project name must be under 100 characters." })
+  .trim();
+
+const projectIdSchema = z
+  .string()
+  .uuid({ message: "Invalid project ID format." });
 
 // Helper to assert authentication
 async function getAuthSession() {
@@ -16,25 +27,24 @@ async function getAuthSession() {
 }
 
 /**
- * Creates a new project, generates a secure write-only API key, and stores its bcrypt hash.
+ * Creates a new project, generates a secure write-only API key, and stores its SHA256 hash.
  */
-export async function createProject(name: string) {
+export async function createProject(name: unknown) {
   const userId = await getAuthSession();
 
-  if (!name || name.trim() === "") {
-    throw new Error("Project name is required.");
-  }
+  // Validate project name with Zod
+  const validatedName = nameSchema.parse(name);
 
   // 1. Generate cryptographically secure API key
   const rawKey = "pg_live_" + crypto.randomBytes(24).toString("hex");
 
-  // 2. Hash key with bcryptjs
-  const hashedApiKey = bcrypt.hashSync(rawKey, 10);
+  // 2. Hash key with SHA256 for fast indexed timing-safe lookups
+  const hashedApiKey = crypto.createHash("sha256").update(rawKey).digest("hex");
 
   // 3. Persist to Neon DB
   const project = await db.project.create({
     data: {
-      name: name.trim(),
+      name: validatedName,
       userId,
       hashedApiKey,
     },
@@ -57,16 +67,16 @@ export async function createProject(name: string) {
 /**
  * Renames an existing project owned by the user.
  */
-export async function renameProject(projectId: string, newName: string) {
+export async function renameProject(projectId: unknown, newName: unknown) {
   const userId = await getAuthSession();
 
-  if (!newName || newName.trim() === "") {
-    throw new Error("New project name is required.");
-  }
+  // Zod Input Validation
+  const validatedId = projectIdSchema.parse(projectId);
+  const validatedName = nameSchema.parse(newName);
 
   // Ensure user owns this project
   const project = await db.project.findFirst({
-    where: { id: projectId, userId },
+    where: { id: validatedId, userId },
   });
 
   if (!project) {
@@ -74,8 +84,8 @@ export async function renameProject(projectId: string, newName: string) {
   }
 
   await db.project.update({
-    where: { id: projectId },
-    data: { name: newName.trim() },
+    where: { id: validatedId },
+    data: { name: validatedName },
   });
 
   revalidatePath("/dashboard");
@@ -85,14 +95,17 @@ export async function renameProject(projectId: string, newName: string) {
 }
 
 /**
- * Generates a new API key, updates the bcrypt hash in the DB, and invalidates the old one.
+ * Generates a new API key, updates the SHA256 hash in the DB, and invalidates the old one.
  */
-export async function regenerateApiKey(projectId: string) {
+export async function regenerateApiKey(projectId: unknown) {
   const userId = await getAuthSession();
+
+  // Zod Input Validation
+  const validatedId = projectIdSchema.parse(projectId);
 
   // Ensure user owns this project
   const project = await db.project.findFirst({
-    where: { id: projectId, userId },
+    where: { id: validatedId, userId },
   });
 
   if (!project) {
@@ -100,10 +113,10 @@ export async function regenerateApiKey(projectId: string) {
   }
 
   const rawKey = "pg_live_" + crypto.randomBytes(24).toString("hex");
-  const hashedApiKey = bcrypt.hashSync(rawKey, 10);
+  const hashedApiKey = crypto.createHash("sha256").update(rawKey).digest("hex");
 
   await db.project.update({
-    where: { id: projectId },
+    where: { id: validatedId },
     data: { hashedApiKey },
   });
 
@@ -119,12 +132,15 @@ export async function regenerateApiKey(projectId: string) {
 /**
  * Destroys a project, triggering cascading deletions of all its associated logs.
  */
-export async function deleteProject(projectId: string) {
+export async function deleteProject(projectId: unknown) {
   const userId = await getAuthSession();
+
+  // Zod Input Validation
+  const validatedId = projectIdSchema.parse(projectId);
 
   // Ensure user owns this project
   const project = await db.project.findFirst({
-    where: { id: projectId, userId },
+    where: { id: validatedId, userId },
   });
 
   if (!project) {
@@ -132,7 +148,7 @@ export async function deleteProject(projectId: string) {
   }
 
   await db.project.delete({
-    where: { id: projectId },
+    where: { id: validatedId },
   });
 
   revalidatePath("/dashboard");

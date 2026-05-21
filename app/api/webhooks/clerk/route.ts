@@ -2,6 +2,21 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { z } from "zod";
+
+// Zod schema to validate the incoming Clerk user payload structure
+const clerkUserSchema = z.object({
+  id: z.string().min(1, "Clerk User ID is required"),
+  email_addresses: z
+    .array(
+      z.object({
+        email_address: z.string().email("Invalid email address format"),
+      })
+    )
+    .min(1, "At least one email address is required"),
+  first_name: z.string().optional().nullable(),
+  last_name: z.string().optional().nullable(),
+});
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -47,15 +62,18 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, email_addresses, first_name, last_name } = evt.data;
-    const email = email_addresses?.[0]?.email_address;
-    const name = [first_name, last_name].filter(Boolean).join(" ") || null;
-
-    if (!email) {
-      return new Response("Error: No email address found for user", {
+    // Parse and validate the event payload with Zod
+    const validationResult = clerkUserSchema.safeParse(evt.data);
+    if (!validationResult.success) {
+      console.error("Clerk Webhook payload schema validation error:", validationResult.error.flatten());
+      return new Response("Error: Invalid Clerk webhook payload structure", {
         status: 400,
       });
     }
+
+    const { id, email_addresses, first_name, last_name } = validationResult.data;
+    const email = email_addresses[0].email_address;
+    const name = [first_name, last_name].filter(Boolean).join(" ") || null;
 
     // Sync to user database
     await db.user.upsert({
