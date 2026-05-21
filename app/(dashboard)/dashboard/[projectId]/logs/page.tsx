@@ -118,36 +118,26 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
   const nextCursor = hasNextPage ? displayedLogs[displayedLogs.length - 1].id : null;
 
   return (
-    <div className="space-y-8 animate-fade-in terminal-grid p-6 min-h-screen rounded-xl border border-outline-variant/30 bg-[#051424]">
-      {/* Page Title Section & Node ID */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-outline-variant/30">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-3">
-            <h2 className="font-headline-lg text-headline-lg text-primary font-bold">
-              {project.name} <span className="text-on-surface-variant font-normal">/ Logs</span>
-            </h2>
-            <span className="px-2 py-0.5 rounded border border-primary-container text-primary-container font-label-sm text-[10px] tracking-widest font-black uppercase pulse-status leading-none">
-              LIVE
-            </span>
-          </div>
-          <p className="text-on-surface-variant font-body-md text-body-md">
-            Real-time event streams and structured error tracking for production environments.
-          </p>
+    <div className="space-y-8 animate-fade-in terminal-grid p-margin-desktop min-h-screen rounded-xl border border-outline-variant/30 bg-[#051424]">
+      {/* Page Title Section */}
+      <div className="flex flex-col gap-1 pb-6 border-b border-outline-variant/30">
+        <div className="flex items-center gap-3">
+          <h2 className="font-headline-lg text-headline-lg text-primary font-bold">
+            {project.name} <span className="text-on-surface-variant font-normal">/ Logs</span>
+          </h2>
+          <span className="px-2 py-0.5 rounded border border-[#00FF9C] text-[#00FF9C] font-label-sm text-label-sm tracking-widest font-black uppercase pulse-status leading-none">
+            LIVE
+          </span>
         </div>
-
-        {/* Node ID Badge with copy */}
-        <div className="flex items-center self-start md:self-auto shrink-0">
-          <div className="flex items-center bg-surface-container-high rounded-lg border border-outline-variant px-3 py-1.5 gap-2 text-xs">
-            <span className="font-label-sm text-label-sm text-on-surface-variant font-mono">NODE ID:</span>
-            <code className="font-label-sm text-label-sm text-primary font-mono select-all font-bold">{project.id}</code>
-          </div>
-        </div>
+        <p className="text-on-surface-variant font-body-md text-body-md">
+          Real-time event streams and structured error tracking for production environments.
+        </p>
       </div>
 
       {/* Metrics Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
         {/* Total Captured */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#3b4b3f] flex flex-col justify-between h-32 group">
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#3b4b3f] hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
           <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Total Captured</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-primary font-black tracking-tight leading-none">{totalCount}</span>
@@ -156,7 +146,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Info Events */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-primary-container flex flex-col justify-between h-32 group">
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-primary-container hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
           <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Info Events</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-primary-container font-black tracking-tight leading-none">{infoCount}</span>
@@ -167,7 +157,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Warnings */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-yellow-400/50 flex flex-col justify-between h-32 group">
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-yellow-400/50 hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
           <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Warnings</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-yellow-400 font-black tracking-tight leading-none">{warnCount}</span>
@@ -178,12 +168,12 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Errors */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-rose-500/50 flex flex-col justify-between h-32 group">
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#ffb4ab] hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
           <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Errors</h3>
           <div className="flex items-end justify-between">
-            <span className="font-headline-lg text-headline-lg text-rose-400 font-black tracking-tight leading-none">{errorCount}</span>
-            <div className="w-8 h-8 rounded bg-rose-500/10 flex items-center justify-center group-hover:glow-red transition-all shrink-0">
-              <AlertCircle className="text-rose-400 h-5 w-5" />
+            <span className="font-headline-lg text-headline-lg text-error font-black tracking-tight leading-none">{errorCount}</span>
+            <div className="w-8 h-8 rounded bg-error/10 flex items-center justify-center group-hover:glow-red transition-all shrink-0">
+              <AlertCircle className="text-error h-5 w-5" />
             </div>
           </div>
         </div>
@@ -217,14 +207,15 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
               </p>
               <div className="mt-8 flex gap-4">
                 <Link
-                  href="/dashboard/settings"
-                  className="px-6 py-2 border border-[#2D3139] rounded font-label-md text-label-md hover:bg-[#1A1D21] transition-colors text-xs text-on-surface-variant hover:text-white"
+                  href="https://github.com/Nur-Adnan/DevTools"
+                  target="_blank"
+                  className="px-6 py-2 border border-[#2D3139] rounded font-label-md text-label-md hover:bg-[#1A1D21] transition-colors text-xs text-on-surface-variant hover:text-white flex items-center justify-center"
                 >
-                  Configure SDK
+                  Documentation
                 </Link>
                 <Link
                   href={`/dashboard/${projectId}/logs`}
-                  className="px-6 py-2 bg-primary-container text-on-primary rounded font-label-md text-label-md font-bold hover:brightness-110 transition-all text-xs"
+                  className="px-6 py-2 bg-primary-container text-on-primary-container rounded font-label-md text-label-md font-bold hover:brightness-110 transition-all text-xs flex items-center justify-center"
                 >
                   Refresh View
                 </Link>
@@ -335,7 +326,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
       </div>
 
-      {/* Bottom Footer Metrics (Optional Decoration for Aesthetic) */}
+      {/* Bottom Footer Metrics */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 border-t border-outline-variant/30 gap-4">
         <div className="flex gap-8">
           <div>

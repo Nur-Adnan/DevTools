@@ -99,7 +99,7 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
       <div className="flex flex-wrap lg:flex-nowrap items-center gap-4 w-full lg:w-auto">
         {/* Severity Level */}
         <div className="flex flex-col w-full sm:w-auto">
-          <span className="text-[10px] text-on-surface-variant font-mono font-bold uppercase tracking-wider mb-1">Level</span>
+          <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Level</span>
           <Select
             value={type}
             onValueChange={(val) => {
@@ -123,7 +123,7 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
 
         {/* Time Interval */}
         <div className="flex flex-col w-full sm:w-auto">
-          <span className="text-[10px] text-on-surface-variant font-mono font-bold uppercase tracking-wider mb-1">Time Range</span>
+          <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Time Range</span>
           <Select
             value={range}
             onValueChange={(val) => {
