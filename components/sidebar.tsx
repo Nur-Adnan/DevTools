@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { 
   Activity, 
   Terminal, 
   Settings, 
   FolderGit2, 
-  ChevronRight,
   AlertTriangle
 } from "lucide-react";
 
@@ -41,22 +40,25 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border/40 bg-[#09090b]/80 backdrop-blur-md">
+    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col bg-surface-container-low border-r border-outline-variant z-30 pt-16">
       {/* Brand logo header */}
-      <div className="flex h-16 items-center px-6 border-b border-border/20 gap-2.5">
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-indigo-500 flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-          <Activity className="h-4.5 w-4.5 text-white" />
-        </div>
-        <div className="flex flex-col">
-          <span className="font-bold text-sm tracking-tight text-neutral-100">PulseGuard</span>
-          <span className="text-[10px] text-neutral-500 font-medium font-mono leading-none">CONSOLE V1</span>
+      <div className="p-6 mb-2">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-primary-container rounded-lg flex items-center justify-center shadow-lg shadow-primary-container/10 shrink-0">
+            <Activity className="h-5 w-5 text-on-primary" strokeWidth={2.5} />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold text-base tracking-tight text-primary leading-tight font-sans">PulseGuard</span>
+            <span className="text-[10px] text-on-surface-variant font-mono font-bold tracking-widest leading-none mt-0.5">V2.4.0-STABLE</span>
+          </div>
         </div>
       </div>
 
       {/* Nav items list */}
-      <nav className="flex-1 space-y-1.5 px-4 py-6">
+      <nav className="flex-1 space-y-1 px-4 py-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           const IconComponent = item.icon;
@@ -66,43 +68,40 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-neutral-900/60",
+                "group flex items-center gap-3 px-4 py-3 rounded-lg font-bold text-xs transition-all duration-200 cursor-pointer",
                 isActive 
-                  ? "bg-primary/10 text-primary border-l-2 border-primary" 
-                  : "text-neutral-400 hover:text-neutral-200"
+                  ? "bg-secondary-container/20 text-primary border-l-2 border-primary-container shadow-sm" 
+                  : "text-on-surface-variant hover:text-primary hover:bg-surface-container-highest"
               )}
             >
-              <div className="flex items-center gap-3">
-                <IconComponent className={cn(
-                  "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-primary" : "text-neutral-400 group-hover:text-neutral-200"
-                )} />
-                <div className="flex flex-col">
-                  <span>{item.name}</span>
-                  <span className="text-[10px] text-neutral-500 font-light hidden group-hover:block transition-all">
-                    {item.description}
-                  </span>
-                </div>
-              </div>
-              <ChevronRight className={cn(
-                "h-3 w-3 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5",
-                isActive ? "text-primary" : "text-neutral-500"
+              <IconComponent className={cn(
+                "h-4 w-4 shrink-0 transition-transform duration-200 group-hover:scale-110",
+                isActive ? "text-primary-container" : "text-on-surface-variant group-hover:text-primary"
               )} />
+              <span className="font-sans font-bold tracking-wide">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      {/* Console details footer */}
-      <div className="border-t border-border/20 p-4 bg-neutral-950/20">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] text-neutral-500 font-mono">STATUS</span>
-          <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono font-medium">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            OPERATIONAL
-          </span>
-        </div>
+      {/* Action / Trigger Button inside Sidebar */}
+      <div className="p-4 mt-auto border-t border-outline-variant/30">
+        <button 
+          onClick={() => router.push("/dashboard?create=true")}
+          className="w-full bg-primary-container text-on-primary px-4 py-3 rounded-lg font-bold hover:brightness-110 active:scale-[0.97] transition-all flex items-center justify-center gap-2 text-xs shadow-lg shadow-primary-container/10"
+        >
+          <FolderGit2 className="h-4 w-4 stroke-[2.5]" />
+          Deploy New Node
+        </button>
       </div>
+
+      {/* Status Bar Bottom */}
+      <footer className="h-10 border-t border-outline-variant bg-surface-container-low flex items-center px-4 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-primary-container pulse-status"></div>
+          <span className="text-[9px] font-mono text-on-surface-variant uppercase tracking-widest font-black">Operational</span>
+        </div>
+      </footer>
     </aside>
   );
 }

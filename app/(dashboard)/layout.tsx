@@ -68,16 +68,16 @@ export default async function DashboardLayout({
   return (
     <div
       id="dashboard-root"
-      className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased relative selection:bg-primary/20 selection:text-white"
+      className="min-h-screen bg-background text-on-background font-sans antialiased relative selection:bg-primary-container selection:text-on-primary-container"
     >
       {/* Subtle background overlay gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(120,119,198,0.03),transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(0,255,156,0.015),transparent_100%)] pointer-events-none" />
 
       {/* Dashboard sidebar shell */}
       <Sidebar />
 
       {/* Main Dashboard shell */}
-      <div className="pl-64 flex flex-col min-h-screen">
+      <div className="pl-64 flex flex-col min-h-screen bg-surface-container-lowest">
         {/* Dashboard topbar menu - passes projects list and active selected ID */}
         <Topbar
           projects={projects.map((p) => ({ id: p.id, name: p.name }))}
@@ -85,8 +85,8 @@ export default async function DashboardLayout({
         />
 
         {/* Dashboard actual pages rendering */}
-        <main className="flex-1 pt-16 p-6 md:p-8 relative z-0">
-          <div className="max-w-7xl mx-auto space-y-6">{children}</div>
+        <main className="flex-1 pt-16 p-8 relative z-0 custom-scrollbar overflow-y-auto">
+          <div className="max-w-7xl mx-auto space-y-8">{children}</div>
         </main>
       </div>
     </div>
