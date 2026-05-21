@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
+      target: runner
     command: []
     restart: always
     volumes: []

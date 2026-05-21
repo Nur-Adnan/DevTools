@@ -15,6 +15,15 @@ COPY packages/ui/package.json ./packages/ui/
 COPY packages/config/package.json ./packages/config/
 RUN pnpm install --frozen-lockfile
 
+# Stage 1.5: development target
+FROM deps AS development
+WORKDIR /app
+COPY . .
+RUN pnpm --filter @pulseguard/db db:generate || pnpm --filter db db:generate || npx prisma generate --schema=packages/db/prisma/schema.prisma
+EXPOSE 3000
+ENV PORT 3000
+CMD ["pnpm", "--filter", "web", "dev"]
+
 # Stage 2: builder
 FROM base AS builder
 WORKDIR /app
