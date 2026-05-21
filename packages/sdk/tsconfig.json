@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@ui/*": ["../ui/src/*"],
+      "@server/*": ["../web/server/*"],
+      "@types/*": ["./src/types/*"],
+      "@config/*": ["../config/src/*"],
+      "@features/*": ["../web/features/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

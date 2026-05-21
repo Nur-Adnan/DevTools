@@ -1,0 +1,28 @@
+{
+  "name": "@pulseguard/db",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "echo 'No dev for DB'",
+    "build": "pnpm db:generate",
+    "lint": "echo 'No lint for DB'",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'No tests for DB'",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@upstash/redis": "^1.38.0",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "prisma": "^7.8.0",
+    "typescript": "^5.0.0"
+  }
+}

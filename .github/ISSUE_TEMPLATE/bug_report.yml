@@ -1,0 +1,46 @@
+name: 🚨 Bug Report
+description: Report a bug or unexpected behavior in PulseGuard.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report this bug! Please provide as much detail as possible to help us reproduce and resolve the issue quickly.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise one-sentence explanation of the bug.
+      placeholder: e.g. Rate limiter blocks valid API keys after 5 requests
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to recreate the bug.
+      placeholder: |
+        1. Start local Docker stack using `make dev-stack`
+        2. Set UPSTASH_REDIS_REST_URL to invalid endpoint
+        3. Dispatch payload POST `/api/ingest`
+        4. See rate limiter crash instead of falling back to default behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Code Snippets & Diagnostics
+      description: Paste any relevant terminal logs, stack traces, or console outputs here.
+      render: bash
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How critical is this issue to the application's overall stability?
+      options:
+        - Low (Cosmetic/Typo)
+        - Moderate (Non-blocking bug)
+        - High (Blocks critical paths/features)
+        - Critical (Crash, Data loss, Security vulnerability)
+    validations:
+      required: true

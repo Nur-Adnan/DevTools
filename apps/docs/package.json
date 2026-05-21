@@ -1,0 +1,12 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'No dev for docs yet'",
+    "build": "echo 'No build for docs yet'",
+    "lint": "echo 'No lint for docs yet'",
+    "typecheck": "echo 'No typecheck for docs yet'",
+    "test": "echo 'No tests for docs yet'"
+  }
+}

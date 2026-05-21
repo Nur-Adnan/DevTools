@@ -1,0 +1,13 @@
+{
+  "name": "@pulseguard/config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared configurations for PulseGuard monorepo",
+  "scripts": {
+    "dev": "echo 'No dev for config'",
+    "build": "echo 'No build for config'",
+    "lint": "echo 'No lint for config'",
+    "typecheck": "echo 'No typecheck for config'",
+    "test": "echo 'No test for config'"
+  }
+}
