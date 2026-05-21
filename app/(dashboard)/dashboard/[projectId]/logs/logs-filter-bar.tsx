@@ -80,18 +80,18 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
   return (
     <form 
       onSubmit={handleSubmit}
-      className={`flex flex-col lg:flex-row items-center justify-between gap-4 bg-[#16181D] border border-[#2D3139] p-4 rounded-lg transition-all duration-300 ${focused ? 'glow-green border-[#00ff9c]/30' : ''}`}
+      className={`flex flex-col lg:flex-row items-center justify-between gap-4 bg-card border border-border p-4 rounded-lg transition-all duration-300 ${focused ? 'glow-green border-primary/30 ring-1 ring-primary/20' : ''}`}
     >
       {/* Message Search */}
       <div className="relative w-full lg:max-w-md">
-        <Search className={`absolute left-3 top-2.5 h-4 w-4 transition-colors duration-200 ${focused ? 'text-[#00ff9c]' : 'text-neutral-500'}`} />
+        <Search className={`absolute left-3 top-2.5 h-4 w-4 transition-colors duration-200 ${focused ? 'text-primary' : 'text-muted-foreground'}`} />
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholder="Search log messages or stack traces..."
-          className="pl-9 bg-[#0A0A0B] border border-[#2D3139] focus-visible:ring-1 focus-visible:ring-primary text-xs h-9 text-neutral-200 placeholder:text-neutral-500 rounded focus-visible:border-primary-container focus-visible:ring-primary-container/20 transition-all"
+          className="pl-9 bg-background border border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9 text-foreground placeholder:text-muted-foreground rounded focus-visible:border-primary focus-visible:ring-primary/20 transition-all"
         />
       </div>
 
@@ -99,7 +99,7 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
       <div className="flex flex-wrap lg:flex-nowrap items-center gap-4 w-full lg:w-auto">
         {/* Severity Level */}
         <div className="flex flex-col w-full sm:w-auto">
-          <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Level</span>
+          <span className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-wider mb-1 font-mono">Level</span>
           <Select
             value={type}
             onValueChange={(val) => {
@@ -109,21 +109,21 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
               }
             }}
           >
-            <SelectTrigger className="w-full sm:w-36 bg-[#0A0A0B] border border-[#2D3139] text-xs h-9 text-neutral-350 focus:ring-1 focus:ring-[#00ff9c]/20 focus:border-[#00ff9c] rounded">
+            <SelectTrigger className="w-full sm:w-36 bg-background border border-border text-xs h-9 text-foreground focus:ring-1 focus:ring-primary/20 focus:border-primary rounded">
               <SelectValue placeholder="Severity" />
             </SelectTrigger>
-            <SelectContent className="bg-neutral-950 border-[#2D3139] text-neutral-200">
-              <SelectItem value="ALL" className="text-xs cursor-pointer focus:bg-surface-container-highest">ALL</SelectItem>
-              <SelectItem value="INFO" className="text-xs text-emerald-400 cursor-pointer focus:bg-surface-container-highest">INFO</SelectItem>
-              <SelectItem value="WARN" className="text-xs text-amber-450 cursor-pointer focus:bg-surface-container-highest">WARNING</SelectItem>
-              <SelectItem value="ERROR" className="text-xs text-rose-450 cursor-pointer focus:bg-surface-container-highest">ERROR</SelectItem>
+            <SelectContent className="bg-popover border-border text-foreground">
+              <SelectItem value="ALL" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">ALL</SelectItem>
+              <SelectItem value="INFO" className="text-xs text-emerald-600 dark:text-emerald-400 cursor-pointer focus:bg-accent focus:text-accent-foreground">INFO</SelectItem>
+              <SelectItem value="WARN" className="text-xs text-amber-600 dark:text-amber-400 cursor-pointer focus:bg-accent focus:text-accent-foreground">WARNING</SelectItem>
+              <SelectItem value="ERROR" className="text-xs text-rose-600 dark:text-rose-450 cursor-pointer focus:bg-accent focus:text-accent-foreground">ERROR</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* Time Interval */}
         <div className="flex flex-col w-full sm:w-auto">
-          <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Time Range</span>
+          <span className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-wider mb-1 font-mono">Time Range</span>
           <Select
             value={range}
             onValueChange={(val) => {
@@ -133,15 +133,15 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
               }
             }}
           >
-            <SelectTrigger className="w-full sm:w-36 bg-[#0A0A0B] border border-[#2D3139] text-xs h-9 text-neutral-350 focus:ring-1 focus:ring-[#00ff9c]/20 focus:border-[#00ff9c] rounded">
+            <SelectTrigger className="w-full sm:w-36 bg-background border border-border text-xs h-9 text-foreground focus:ring-1 focus:ring-primary/20 focus:border-primary rounded">
               <SelectValue placeholder="Time Range" />
             </SelectTrigger>
-            <SelectContent className="bg-neutral-950 border-[#2D3139] text-neutral-200">
-              <SelectItem value="1h" className="text-xs cursor-pointer focus:bg-surface-container-highest">1h (Last Hour)</SelectItem>
-              <SelectItem value="24h" className="text-xs cursor-pointer focus:bg-surface-container-highest">24h (Last Day)</SelectItem>
-              <SelectItem value="7d" className="text-xs cursor-pointer focus:bg-surface-container-highest">7d (Last Week)</SelectItem>
-              <SelectItem value="30d" className="text-xs cursor-pointer focus:bg-surface-container-highest">30d (Last Month)</SelectItem>
-              <SelectItem value="all" className="text-xs cursor-pointer focus:bg-surface-container-highest">All Time</SelectItem>
+            <SelectContent className="bg-popover border-border text-foreground">
+              <SelectItem value="1h" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">1h (Last Hour)</SelectItem>
+              <SelectItem value="24h" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">24h (Last Day)</SelectItem>
+              <SelectItem value="7d" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">7d (Last Week)</SelectItem>
+              <SelectItem value="30d" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">30d (Last Month)</SelectItem>
+              <SelectItem value="all" className="text-xs cursor-pointer focus:bg-accent focus:text-accent-foreground">All Time</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -151,13 +151,13 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
           <Button
             type="submit"
             size="sm"
-            className="h-9 px-6 bg-surface-container-highest border border-outline-variant hover:bg-surface-variant text-xs font-bold gap-2 text-on-background hover:text-white rounded transition-colors flex items-center"
+            className="h-9 px-6 bg-primary text-primary-foreground hover:opacity-90 text-xs font-bold gap-2 rounded transition-colors flex items-center"
             disabled={isPending}
           >
             {isPending ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
-              <ListFilter className="h-4 w-4 text-[#00ff9c]" />
+              <ListFilter className="h-4 w-4" />
             )}
             Search
           </Button>
@@ -168,7 +168,7 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
               variant="outline"
               size="sm"
               onClick={handleReset}
-              className="h-9 px-4 bg-transparent border border-outline-variant/60 text-xs text-neutral-400 hover:text-white hover:bg-surface-container-high/40 rounded transition-colors"
+              className="h-9 px-4 bg-transparent border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
               disabled={isPending}
             >
               <RotateCcw className="h-3.5 w-3.5 mr-1.5" />

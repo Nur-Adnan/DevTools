@@ -85,7 +85,7 @@ export function Sidebar() {
             >
               <IconComponent className={cn(
                 "mr-3 h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-110",
-                isActive ? "text-primary-fixed" : "text-on-surface-variant group-hover:text-on-surface"
+                isActive ? "text-primary" : "text-on-surface-variant group-hover:text-on-surface"
               )} />
               <span className="font-label-md text-label-md">{item.name}</span>
             </Link>
@@ -110,8 +110,8 @@ export function Sidebar() {
           </div>
         </SignOutButton>
         <div className="px-6 mt-4 flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[#00FF9C] shadow-[0_0_8px_#00FF9C] pulse-status"></div>
-          <span className="font-label-sm text-label-sm text-[#00FF9C] uppercase tracking-widest font-black">Operational</span>
+          <div className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-[#00FF9C] shadow-[0_0_8px_rgba(16,185,129,0.5)] dark:shadow-[0_0_8px_#00FF9C] pulse-status"></div>
+          <span className="font-label-sm text-label-sm text-emerald-700 dark:text-[#00FF9C] uppercase tracking-widest font-black">Operational</span>
         </div>
       </div>
     </aside>

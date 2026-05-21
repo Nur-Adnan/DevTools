@@ -1,13 +1,14 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import { LogGroup } from "@prisma/client";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -60,7 +61,7 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
 
   // 3. Fetch detailed sample logs for type and message formatting
   const groupsWithDetails = await Promise.all(
-    logGroups.map(async (group) => {
+    logGroups.map(async (group: LogGroup) => {
       const sampleLog = await db.log.findFirst({
         where: { fingerprint: group.fingerprint },
         orderBy: { createdAt: "desc" },
@@ -85,82 +86,80 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
   const resolvedCount = await db.logGroup.count({ where: { projectId, resolved: true } });
 
   return (
-    <div className="space-y-8 p-6 max-w-7xl mx-auto">
+    <div className="space-y-8 animate-fade-in">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-neutral-50 to-neutral-400 bg-clip-text text-transparent">
-            Error Signature Groups
-          </h1>
-          <p className="text-sm text-neutral-400 mt-1.5">
-            PulseGuard hashes types, messages, and stack traces into distinct fingerprints to automatically group recurring events.
-          </p>
-        </div>
+      <div className="flex flex-col gap-1">
+        <h2 className="font-headline-lg text-headline-lg text-foreground font-bold">
+          Error Signature Groups
+        </h2>
+        <p className="text-muted-foreground font-body-md text-body-md">
+          PulseGuard hashes types, messages, and stack traces into distinct fingerprints to automatically group recurring events.
+        </p>
       </div>
 
       {/* Grid of Quick Counters */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Link 
+        <Link
           href={`/dashboard/${projectId}/errors?filter=unresolved`}
-          className="cursor-pointer transition-all duration-200 hover:scale-[1.01]"
+          className="cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
         >
-          <Card className={`bg-[#0c0c0e]/80 border-neutral-800 backdrop-blur-md transition-colors ${filter === "unresolved" ? "border-primary/40 bg-primary/5" : ""}`}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs uppercase font-semibold text-neutral-400">Unresolved Signatures</CardDescription>
-              <CardTitle className="text-3xl font-black text-primary font-mono">{unresolvedCount}</CardTitle>
+          <Card className={`bg-card border-border hover:border-primary/50 transition-all ${filter === "unresolved" ? "border-primary/50 bg-primary/5 ring-1 ring-primary/20" : ""}`}>
+            <CardHeader className="pb-4">
+              <CardDescription className="text-xs uppercase font-semibold text-muted-foreground font-mono">Unresolved Signatures</CardDescription>
+              <CardTitle className="text-3xl font-black text-primary font-mono mt-1">{unresolvedCount}</CardTitle>
             </CardHeader>
           </Card>
         </Link>
-        <Link 
+        <Link
           href={`/dashboard/${projectId}/errors?filter=resolved`}
-          className="cursor-pointer transition-all duration-200 hover:scale-[1.01]"
+          className="cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
         >
-          <Card className={`bg-[#0c0c0e]/80 border-neutral-800 backdrop-blur-md transition-colors ${filter === "resolved" ? "border-emerald-500/40 bg-emerald-950/10" : ""}`}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs uppercase font-semibold text-neutral-400">Resolved Signatures</CardDescription>
-              <CardTitle className="text-3xl font-black text-emerald-400 font-mono">{resolvedCount}</CardTitle>
+          <Card className={`bg-card border-border hover:border-emerald-500/50 transition-all ${filter === "resolved" ? "border-emerald-500/50 bg-emerald-50 dark:bg-emerald-950/10 ring-1 ring-emerald-500/20" : ""}`}>
+            <CardHeader className="pb-4">
+              <CardDescription className="text-xs uppercase font-semibold text-muted-foreground font-mono">Resolved Signatures</CardDescription>
+              <CardTitle className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1">{resolvedCount}</CardTitle>
             </CardHeader>
           </Card>
         </Link>
-        <Link 
+        <Link
           href={`/dashboard/${projectId}/errors?filter=all`}
-          className="cursor-pointer transition-all duration-200 hover:scale-[1.01]"
+          className="cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
         >
-          <Card className={`bg-[#0c0c0e]/80 border-neutral-800 backdrop-blur-md transition-colors ${filter === "all" ? "border-indigo-500/40 bg-indigo-950/10" : ""}`}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs uppercase font-semibold text-neutral-400">Total Signatures</CardDescription>
-              <CardTitle className="text-3xl font-black text-indigo-400 font-mono">{totalCount}</CardTitle>
+          <Card className={`bg-card border-border hover:border-indigo-500/50 transition-all ${filter === "all" ? "border-indigo-500/50 bg-indigo-50 dark:bg-indigo-950/10 ring-1 ring-indigo-500/20" : ""}`}>
+            <CardHeader className="pb-4">
+              <CardDescription className="text-xs uppercase font-semibold text-muted-foreground font-mono">Total Signatures</CardDescription>
+              <CardTitle className="text-3xl font-black text-indigo-650 dark:text-indigo-400 font-mono mt-1">{totalCount}</CardTitle>
             </CardHeader>
           </Card>
         </Link>
       </div>
 
       {/* Main Groups Log Table */}
-      <Card className="bg-[#0c0c0e]/80 border-neutral-800 backdrop-blur-md">
-        <CardHeader className="flex flex-row items-center justify-between border-b border-border/10 pb-4">
+      <Card className="bg-card border-border">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-4">
           <div>
-            <CardTitle className="text-lg font-bold text-neutral-100">Signature Groups</CardTitle>
-            <CardDescription className="text-xs text-neutral-500 mt-0.5">
+            <CardTitle className="text-lg font-bold text-foreground">Signature Groups</CardTitle>
+            <CardDescription className="text-xs text-muted-foreground mt-0.5">
               Showing {groupsWithDetails.length} error signature{groupsWithDetails.length === 1 ? "" : "s"}
             </CardDescription>
           </div>
           {/* Simple toggle UI buttons */}
-          <div className="flex bg-neutral-900 border border-neutral-800 rounded-lg p-0.5 text-xs font-medium">
+          <div className="flex bg-muted border border-border rounded-lg p-0.5 text-xs font-medium">
             <Link
               href={`/dashboard/${projectId}/errors?filter=unresolved`}
-              className={`px-3 py-1.5 rounded-md transition-all ${filter === "unresolved" ? "bg-neutral-800 text-neutral-100 shadow-sm" : "text-neutral-400 hover:text-neutral-200"}`}
+              className={`px-3 py-1.5 rounded-md transition-all ${filter === "unresolved" ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"}`}
             >
               Unresolved
             </Link>
             <Link
               href={`/dashboard/${projectId}/errors?filter=resolved`}
-              className={`px-3 py-1.5 rounded-md transition-all ${filter === "resolved" ? "bg-neutral-800 text-neutral-100 shadow-sm" : "text-neutral-400 hover:text-neutral-200"}`}
+              className={`px-3 py-1.5 rounded-md transition-all ${filter === "resolved" ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"}`}
             >
               Resolved
             </Link>
             <Link
               href={`/dashboard/${projectId}/errors?filter=all`}
-              className={`px-3 py-1.5 rounded-md transition-all ${filter === "all" ? "bg-neutral-800 text-neutral-100 shadow-sm" : "text-neutral-400 hover:text-neutral-200"}`}
+              className={`px-3 py-1.5 rounded-md transition-all ${filter === "all" ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"}`}
             >
               All
             </Link>
@@ -170,10 +169,10 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
         <CardContent className="p-0">
           {groupsWithDetails.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-              <CheckCircle2 className="h-10 w-10 text-neutral-500 mb-3.5 stroke-[1.5]" />
-              <h3 className="font-bold text-neutral-200 text-sm">No Error Groups Found</h3>
-              <p className="text-xs text-neutral-500 mt-1 max-w-xs">
-                {filter === "unresolved" 
+              <CheckCircle2 className="h-10 w-10 text-muted-foreground mb-3.5 stroke-[1.5]" />
+              <h3 className="font-bold text-foreground text-sm">No Error Groups Found</h3>
+              <p className="text-xs text-muted-foreground mt-1 max-w-xs leading-relaxed">
+                {filter === "unresolved"
                   ? "All error signatures are marked resolved. Excellent work!"
                   : "No error signatures matched the selected resolution filter."}
               </p>
@@ -181,22 +180,22 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
           ) : (
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-neutral-950/40">
-                  <TableRow className="border-b border-border/10">
-                    <TableHead className="w-[120px] text-neutral-400 font-bold">Severity</TableHead>
-                    <TableHead className="text-neutral-400 font-bold">Error Signature & Fingerprint</TableHead>
-                    <TableHead className="w-[100px] text-right text-neutral-400 font-bold">Occurrences</TableHead>
-                    <TableHead className="w-[180px] text-neutral-400 font-bold">First Seen</TableHead>
-                    <TableHead className="w-[180px] text-neutral-400 font-bold">Last Seen</TableHead>
-                    <TableHead className="w-[120px] text-right text-neutral-400 font-bold">Action</TableHead>
+                <TableHeader className="bg-muted/40">
+                  <TableRow className="border-b border-border">
+                    <TableHead className="w-[120px] text-muted-foreground font-bold font-label-sm text-label-sm uppercase">Severity</TableHead>
+                    <TableHead className="text-muted-foreground font-bold font-label-sm text-label-sm uppercase">Error Signature & Fingerprint</TableHead>
+                    <TableHead className="w-[120px] text-right text-muted-foreground font-bold font-label-sm text-label-sm uppercase pr-6">Occurrences</TableHead>
+                    <TableHead className="w-[180px] text-muted-foreground font-bold font-label-sm text-label-sm uppercase">First Seen</TableHead>
+                    <TableHead className="w-[180px] text-muted-foreground font-bold font-label-sm text-label-sm uppercase">Last Seen</TableHead>
+                    <TableHead className="w-[120px] text-right text-muted-foreground font-bold font-label-sm text-label-sm uppercase pr-6">Action</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="divide-y divide-border/40">
                   {groupsWithDetails.map((group) => {
                     const badgeStyles = {
-                      INFO: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-                      WARN: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-                      ERROR: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+                      INFO: "border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-mono text-[9px] font-bold leading-none",
+                      WARN: "border-yellow-200 dark:border-yellow-500/20 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-800 dark:text-yellow-400 font-mono text-[9px] font-bold leading-none",
+                      ERROR: "border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-450 font-mono text-[9px] font-bold leading-none",
                     };
 
                     const firstSeenFormatted = new Date(group.firstSeen).toLocaleString("en-US", {
@@ -216,13 +215,13 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
                     });
 
                     return (
-                      <TableRow 
-                        key={group.id} 
-                        className={`border-b border-border/10 hover:bg-neutral-900/20 transition-colors ${group.resolved ? "opacity-60" : ""}`}
+                      <TableRow
+                        key={group.id}
+                        className={`border-b border-border/40 hover:bg-muted/40 transition-colors ${group.resolved ? "opacity-60" : ""}`}
                       >
                         {/* Severity Badge */}
                         <TableCell>
-                          <Badge className={`border uppercase tracking-wider text-[10px] font-bold ${badgeStyles[group.type as keyof typeof badgeStyles]}`}>
+                          <Badge variant="outline" className={`border uppercase tracking-wider text-[10px] font-mono font-bold px-2 py-0.5 ${badgeStyles[group.type as keyof typeof badgeStyles]}`}>
                             {group.type}
                           </Badge>
                         </TableCell>
@@ -231,21 +230,21 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
                         <TableCell className="max-w-md">
                           <div className="flex flex-col gap-1">
                             {group.sampleLogId ? (
-                              <Link 
+                              <Link
                                 href={`/dashboard/${projectId}/logs/${group.sampleLogId}`}
-                                className="font-semibold text-neutral-200 hover:text-primary transition-colors text-sm truncate block"
+                                className="font-semibold text-foreground hover:text-primary transition-colors text-sm truncate block"
                                 title={group.message}
                               >
                                 {group.message}
                               </Link>
                             ) : (
-                              <span className="font-semibold text-neutral-200 text-sm truncate" title={group.message}>
+                              <span className="font-semibold text-foreground text-sm truncate" title={group.message}>
                                 {group.message}
                               </span>
                             )}
-                            <div className="flex items-center gap-1.5 text-[10px] text-neutral-500 font-mono">
+                            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
                               <span>FINGERPRINT:</span>
-                              <span className="select-all text-neutral-400 truncate w-32" title={group.fingerprint}>
+                              <span className="select-all text-muted-foreground/80 truncate w-32 font-bold" title={group.fingerprint}>
                                 {group.fingerprint.slice(0, 16)}...
                               </span>
                             </div>
@@ -253,26 +252,26 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
                         </TableCell>
 
                         {/* Event Count Occurrences */}
-                        <TableCell className="text-right font-mono font-black text-neutral-200">
+                        <TableCell className="text-right font-mono font-black text-foreground pr-6">
                           {group.count.toLocaleString()}
                         </TableCell>
 
                         {/* First Seen Date */}
-                        <TableCell className="text-xs text-neutral-400 font-medium">
+                        <TableCell className="text-xs text-muted-foreground font-medium">
                           {firstSeenFormatted}
                         </TableCell>
 
                         {/* Last Seen Date */}
-                        <TableCell className="text-xs text-neutral-400 font-medium">
+                        <TableCell className="text-xs text-muted-foreground font-medium">
                           {lastSeenFormatted}
                         </TableCell>
 
                         {/* Resolve Action Button */}
-                        <TableCell className="text-right">
-                          <ResolveButton 
-                            projectId={projectId} 
-                            fingerprint={group.fingerprint} 
-                            initialResolved={group.resolved} 
+                        <TableCell className="text-right pr-6">
+                          <ResolveButton
+                            projectId={projectId}
+                            fingerprint={group.fingerprint}
+                            initialResolved={group.resolved}
                           />
                         </TableCell>
                       </TableRow>

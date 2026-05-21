@@ -27,7 +27,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", geistSans.variable, geistMono.variable)}>
-      <body className="antialiased">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (theme === 'dark' || (!theme && supportDarkMode)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased bg-background text-foreground transition-colors duration-200">
         <ClerkProvider>
           <header className="global-header border-b border-border/20 backdrop-blur-md bg-[#09090b]/75 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">

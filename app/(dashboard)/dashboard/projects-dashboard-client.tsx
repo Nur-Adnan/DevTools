@@ -158,7 +158,7 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
           return (
             <div 
               key={project.id}
-              className="animate-slide-in project-card-glass border border-outline-variant p-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:border-primary-container/50 group relative overflow-hidden flex flex-col justify-between"
+              className="animate-slide-in project-card-glass border border-outline-variant p-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:border-primary-container/50 group relative overflow-hidden flex flex-col justify-between shadow-sm"
             >
               {/* Settings Action on Hover */}
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -178,12 +178,12 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
                   <Laptop className="h-6 w-6 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-headline-sm text-headline-sm text-primary group-hover:text-white transition-colors truncate">
+                  <h3 className="font-headline-sm text-headline-sm text-foreground group-hover:text-primary transition-colors truncate">
                     {project.name}
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary-container pulse-status"></div>
-                    <span className="font-label-sm text-label-sm text-primary-container uppercase tracking-widest">Active</span>
+                    <span className="font-label-sm text-label-sm text-primary-container uppercase tracking-widest font-semibold">Active</span>
                   </div>
                 </div>
               </div>
@@ -191,31 +191,47 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
               {/* Encryption API Key Container */}
               <div className="space-y-4 mb-8">
                 <div>
-                  <label className="font-label-sm text-label-sm text-on-surface-variant block mb-2 uppercase">
+                  <label className="font-label-sm text-label-sm text-on-surface-variant block mb-2 uppercase font-semibold">
                     ENCRYPTION KEY (AES-256)
                   </label>
                   <div className="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant p-3 rounded font-label-md text-on-surface-variant select-all">
                     <Lock className="h-3.5 w-3.5 text-on-surface-variant shrink-0" />
-                    <code className="font-label-md truncate flex-1 leading-none">{maskedKey}</code>
+                    <code className="font-label-md truncate flex-1 leading-none text-foreground">{maskedKey}</code>
                     <button 
                       onClick={() => {
                         navigator.clipboard.writeText(`pg_live_key_details_in_settings`);
                         alert("API key can be copied during creation or regenerated in Settings.");
                       }}
-                      className="ml-auto hover:text-primary transition-colors"
+                      className="ml-auto hover:text-primary transition-colors text-on-surface-variant"
                     >
                       <Copy className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
 
-                {/* Mockup Preview Graphic */}
-                <div className="relative h-24 w-full rounded overflow-hidden border border-outline-variant/30 bg-surface-container-lowest">
-                  <img 
-                    alt={`${project.name} preview`}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-40 group-hover:opacity-80"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUOsmx-0UeezNjR-UNrNS6LPU-ZlVF8WLwTatC5Ienm7InjbBwJ_u3Oxm2KMRMXHg53JZ8xBc8v6KPKsl0omsrEKFs4wTx0HFoPy-e57ojBUE1YTIq67JYMhm87Ckuvy005M4in8jFRo21It6ahpP0zLuz72PhhEUvUFRrjOOI8Ccqvc3B70JB_dSTtX_tnF_3c8yQLkPfCY_dpKckyELIXxVG3NChJioocq_hGitDJgNckGqg2K4LMyjkKNC6V84-kKksLfX_Vv9p"
-                  />
+                {/* Mockup Preview Graphic: High Quality Interactive Code Block */}
+                <div className="relative h-24 w-full rounded overflow-hidden border border-outline-variant bg-surface-container-lowest p-3 flex flex-col justify-between font-mono text-[9px] text-on-surface-variant/80 group-hover:border-primary/30 transition-all duration-300">
+                  <div className="flex items-center justify-between opacity-50 shrink-0 pb-1.5 border-b border-outline-variant/30">
+                    <span className="font-bold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> logger-sdk</span>
+                    <span>Node.js v20</span>
+                  </div>
+                  <div className="space-y-1 mt-1.5 font-mono select-none overflow-hidden flex-1">
+                    <div className="flex gap-1.5">
+                      <span className="text-primary font-bold">import</span>
+                      <span>{"{ createLogger }"}</span>
+                      <span className="text-primary font-bold">from</span>
+                      <span className="text-emerald-750 dark:text-emerald-400">&apos;@pg/sdk&apos;</span>
+                    </div>
+                    <div className="flex gap-1.5">
+                      <span className="text-primary font-bold">const</span>
+                      <span>{"logger = createLogger({ apiKey: '...' })"}</span>
+                    </div>
+                    <div className="flex gap-1.5">
+                      <span>{"logger.error("}</span>
+                      <span className="text-emerald-750 dark:text-emerald-400">&apos;API error&apos;</span>
+                      <span>{", { code: 500 })"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -323,7 +339,7 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
                     cx="50"
                     cy="50"
                     r="42"
-                    stroke="#122131"
+                    className="stroke-muted dark:stroke-surface-container-high"
                     strokeWidth="4"
                     fill="transparent"
                   />
@@ -331,12 +347,11 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
                     cx="50"
                     cy="50"
                     r="42"
-                    stroke="#00ff9c"
+                    className="stroke-primary transition-all duration-1000 ease-out"
                     strokeWidth="4"
                     fill="transparent"
                     strokeDasharray="263.89"
                     strokeDashoffset={263.89 - (263.89 * 42.8) / 100}
-                    className="transition-all duration-1000 ease-out"
                   />
                 </svg>
                 <div className="z-10 rounded-full bg-surface-container-lowest w-24 h-24 border border-outline-variant flex items-center justify-center shadow-inner">
@@ -350,28 +365,28 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
 
       {/* Deploy Project Dialog Container Popup */}
       <Dialog open={isOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="bg-neutral-950 border-neutral-800 text-white rounded-xl shadow-2xl max-w-md p-6 overflow-hidden">
+        <DialogContent className="bg-card border-border text-foreground rounded-xl shadow-2xl max-w-md p-6 overflow-hidden">
           
           {!createdProject ? (
             // Phase 1: Input Project Name Form
             <form onSubmit={handleCreate} className="space-y-4">
               <DialogHeader>
-                <DialogTitle className="text-lg font-bold text-neutral-100 flex items-center gap-2">
-                  <FolderGit2 className="h-5 w-5 text-[#00ff9c]" />
+                <DialogTitle className="text-lg font-bold text-foreground flex items-center gap-2">
+                  <FolderGit2 className="h-5 w-5 text-primary" />
                   New Project Monitor
                 </DialogTitle>
-                <DialogDescription className="text-neutral-400 text-xs mt-1.5 leading-relaxed">
+                <DialogDescription className="text-muted-foreground text-xs mt-1.5 leading-relaxed">
                   Establish a new isolated platform scope. This generates a cryptographically secure key to track HTTP/HTTPS request states.
                 </DialogDescription>
               </DialogHeader>
 
               <div className="space-y-2 pt-2">
-                <label className="text-xs font-semibold text-neutral-400">Application Name</label>
+                <label className="text-xs font-semibold text-muted-foreground">Application Name</label>
                 <Input
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   placeholder="e.g. mystore-api-production"
-                  className="bg-neutral-900 border-neutral-800 focus-visible:ring-1 focus-visible:ring-[#00ff9c] text-xs h-10"
+                  className="bg-background border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-10"
                   disabled={loading}
                   required
                   autoFocus
@@ -379,7 +394,7 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
               </div>
 
               {error && (
-                <div className="text-rose-500 text-xs bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-lg">
+                <div className="text-destructive text-xs bg-destructive/10 border border-destructive/20 p-2.5 rounded-lg">
                   {error}
                 </div>
               )}
@@ -389,14 +404,14 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
                   type="button" 
                   variant="ghost" 
                   onClick={handleCloseDialog}
-                  className="text-neutral-400 hover:text-white text-xs h-9 hover:bg-neutral-900"
+                  className="text-muted-foreground hover:text-foreground text-xs h-9 hover:bg-accent"
                   disabled={loading}
                 >
                   Cancel
                 </Button>
                 <Button 
                   type="submit"
-                  className="bg-[#00ff9c] text-[#002110] hover:bg-[#00ff9c]/90 text-xs font-bold h-9 px-4"
+                  className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-bold h-9 px-4"
                   disabled={loading}
                 >
                   {loading ? "Creating..." : "Create Project"}
@@ -407,21 +422,21 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
             // Phase 2: Credentials display (Show rawKey ONCE)
             <div className="space-y-5">
               <DialogHeader>
-                <DialogTitle className="text-lg font-bold text-[#00ff9c] flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-[#00ff9c]" />
+                <DialogTitle className="text-lg font-bold text-primary flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-primary" />
                   Project Created Successfully!
                 </DialogTitle>
-                <DialogDescription className="text-neutral-400 text-xs mt-1.5 leading-relaxed">
+                <DialogDescription className="text-muted-foreground text-xs mt-1.5 leading-relaxed">
                   The API key has been securely generated. This is your write access token to send telemetry logs.
                 </DialogDescription>
               </DialogHeader>
 
               {/* Danger Warning Alert Banner */}
-              <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 flex items-start gap-2.5">
-                <ShieldAlert className="h-4.5 w-4.5 text-amber-500 shrink-0 mt-0.5" />
+              <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 dark:bg-amber-500/5 text-amber-800 dark:text-amber-500 p-3 flex items-start gap-2.5">
+                <ShieldAlert className="h-4.5 w-4.5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
                 <div className="space-y-0.5">
-                  <h4 className="text-xs font-semibold text-amber-500">Security Warning</h4>
-                  <p className="text-[10px] text-neutral-400 leading-normal">
+                  <h4 className="text-xs font-semibold text-amber-800 dark:text-amber-550">Security Warning</h4>
+                  <p className="text-[10px] text-muted-foreground leading-normal">
                     Please copy this API key now. For your security, **it cannot be shown again** once you close this dialog.
                   </p>
                 </div>
@@ -430,27 +445,27 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
               {/* API Credentials Box */}
               <div className="space-y-2 pt-1">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-neutral-400 font-semibold flex items-center gap-1.5">
-                    <Key className="h-3.5 w-3.5 text-[#00ff9c]" />
+                  <span className="text-muted-foreground font-semibold flex items-center gap-1.5">
+                    <Key className="h-3.5 w-3.5 text-primary" />
                     Write-Only API Key
                   </span>
-                  <Badge className="text-[9px] text-[#00ff9c] border-[#00ff9c]/20 bg-[#00ff9c]/5 font-mono">
+                  <Badge className="text-[9px] text-primary border-primary/20 bg-primary/10 dark:bg-primary/5 font-mono">
                     Ready
                   </Badge>
                 </div>
                 
-                <div className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-800 p-2.5 rounded-lg font-mono text-xs">
-                  <span className="text-neutral-200 select-all truncate flex-1 font-mono text-xs">
+                <div className="flex items-center gap-1.5 bg-muted/50 border border-border p-2.5 rounded-lg font-mono text-xs">
+                  <span className="text-foreground select-all truncate flex-1 font-mono text-xs">
                     {createdProject.rawKey}
                   </span>
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-8 w-8 text-neutral-400 hover:text-white shrink-0 bg-neutral-950 border border-neutral-800 hover:border-neutral-750"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground shrink-0 bg-background border border-border hover:bg-muted"
                     onClick={handleCopyKey}
                   >
                     {copied ? (
-                      <Check className="h-3.5 w-3.5 text-[#00ff9c]" />
+                      <Check className="h-3.5 w-3.5 text-primary" />
                     ) : (
                       <Copy className="h-3.5 w-3.5" />
                     )}
@@ -459,13 +474,13 @@ export function ProjectsDashboardClient({ initialProjects }: ProjectsDashboardCl
               </div>
 
               <div className="border-t border-border/10 pt-4 flex items-center justify-between gap-4">
-                <div className="text-[10px] text-neutral-500 flex items-center gap-1">
+                <div className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
                   <Lock className="h-3 w-3" />
                   SHA-256 hashed credentials
                 </div>
                 <Button 
                   onClick={handleCloseDialog}
-                  className="bg-white text-black hover:bg-neutral-200 text-xs h-9 font-bold px-4"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs h-9 font-bold px-4"
                 >
                   I&apos;ve Saved It
                   <ArrowRight className="h-3.5 w-3.5 ml-1.5" />

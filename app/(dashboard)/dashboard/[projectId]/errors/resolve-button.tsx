@@ -34,16 +34,16 @@ export function ResolveButton({ projectId, fingerprint, initialResolved }: Resol
       size="sm"
       disabled={isLoading}
       onClick={handleToggle}
-      className={`h-8 transition-all gap-1.5 font-medium ${
+      className={`h-8 transition-all gap-1.5 font-semibold text-xs rounded ${
         resolved 
-          ? "border-emerald-500/30 text-emerald-400 bg-emerald-950/20 hover:bg-emerald-900/20" 
-          : "bg-primary hover:bg-primary/95 text-primary-foreground shadow-md shadow-primary/10"
+          ? "border-emerald-500/30 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/20" 
+          : "bg-primary hover:bg-primary/90 text-primary-foreground"
       }`}
     >
       {isLoading ? (
         <Loader2 className="h-3.5 w-3.5 animate-spin" />
       ) : resolved ? (
-        <RotateCcw className="h-3.5 w-3.5 text-emerald-400" />
+        <RotateCcw className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
       ) : (
         <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground" />
       )}

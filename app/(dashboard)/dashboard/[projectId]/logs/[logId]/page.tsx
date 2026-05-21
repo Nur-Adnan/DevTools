@@ -61,17 +61,17 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
   let bgGradient = "";
 
   if (log.type === "ERROR") {
-    badgeColor = "bg-rose-500/10 text-rose-400 border-rose-500/20";
-    icon = <XCircle className="h-6 w-6 text-rose-400 shrink-0 mt-0.5" />;
-    bgGradient = "from-rose-500/[0.03] to-transparent";
+    badgeColor = "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20";
+    icon = <XCircle className="h-6 w-6 text-rose-600 dark:text-rose-450 shrink-0 mt-0.5" />;
+    bgGradient = "from-rose-500/[0.04] to-transparent";
   } else if (log.type === "WARN") {
-    badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/20";
-    icon = <AlertTriangle className="h-6 w-6 text-amber-400 shrink-0 mt-0.5" />;
-    bgGradient = "from-amber-500/[0.03] to-transparent";
+    badgeColor = "bg-yellow-50 text-yellow-800 border-yellow-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20";
+    icon = <AlertTriangle className="h-6 w-6 text-yellow-600 dark:text-amber-400 shrink-0 mt-0.5" />;
+    bgGradient = "from-yellow-500/[0.04] to-transparent";
   } else {
-    badgeColor = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-    icon = <CheckCircle2 className="h-6 w-6 text-emerald-400 shrink-0 mt-0.5" />;
-    bgGradient = "from-emerald-500/[0.03] to-transparent";
+    badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20";
+    icon = <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-450 shrink-0 mt-0.5" />;
+    bgGradient = "from-emerald-500/[0.04] to-transparent";
   }
 
   return (
@@ -80,7 +80,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
       <div>
         <Link
           href={`/dashboard/${projectId}/logs`}
-          className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-neutral-200 transition-colors group"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors group font-mono"
         >
           <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
           Back to logs explorer
@@ -88,7 +88,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
       </div>
 
       {/* Main Log Title Header Card */}
-      <Card className={`bg-gradient-to-br ${bgGradient} bg-neutral-950/40 border border-white/[0.04] rounded-xl overflow-hidden`}>
+      <Card className={`bg-gradient-to-br ${bgGradient} bg-card border border-border rounded-xl overflow-hidden`}>
         <CardContent className="p-6 md:p-8 space-y-6">
           <div className="flex items-start gap-4">
             {icon}
@@ -97,28 +97,28 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
                 <Badge variant="outline" className={`font-mono text-[10px] px-2 py-0.5 ${badgeColor}`}>
                   {log.type}
                 </Badge>
-                <span className="text-[10px] text-neutral-500 font-mono">
+                <span className="text-[10px] text-muted-foreground font-mono">
                   EVENT ID: {log.id}
                 </span>
               </div>
-              <h1 className="text-lg md:text-xl font-bold tracking-tight text-neutral-100 break-words leading-relaxed select-text font-mono">
+              <h1 className="text-lg md:text-xl font-bold tracking-tight text-foreground break-words leading-relaxed select-text font-mono">
                 {log.message}
               </h1>
             </div>
           </div>
 
-          <div className="h-[1px] bg-white/[0.04]" />
+          <div className="h-[1px] bg-border" />
 
           {/* Quick Details Ribbon */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {/* Timestamp */}
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-neutral-900/40 border border-white/[0.04] flex items-center justify-center text-neutral-400 shrink-0">
+              <div className="h-9 w-9 rounded-lg bg-muted border border-border flex items-center justify-center text-muted-foreground shrink-0">
                 <Calendar className="h-4 w-4" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-neutral-500 font-mono uppercase font-semibold">Captured At</span>
-                <span className="text-xs text-neutral-300 font-mono truncate">
+                <span className="text-[10px] text-muted-foreground font-mono uppercase font-semibold">Captured At</span>
+                <span className="text-xs text-foreground font-mono truncate">
                   {new Date(log.createdAt).toLocaleString(undefined, {
                     year: "numeric",
                     month: "short",
@@ -134,12 +134,12 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
 
             {/* Source */}
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-neutral-900/40 border border-white/[0.04] flex items-center justify-center text-neutral-400 shrink-0">
+              <div className="h-9 w-9 rounded-lg bg-muted border border-border flex items-center justify-center text-muted-foreground shrink-0">
                 <Cpu className="h-4 w-4" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-neutral-500 font-mono uppercase font-semibold">Client Environment</span>
-                <span className="text-xs text-neutral-300 font-mono truncate" title={log.source || "N/A"}>
+                <span className="text-[10px] text-muted-foreground font-mono uppercase font-semibold">Client Environment</span>
+                <span className="text-xs text-foreground font-mono truncate" title={log.source || "N/A"}>
                   {log.source || "Unknown SDK / Host"}
                 </span>
               </div>
@@ -147,12 +147,12 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
 
             {/* Fingerprint */}
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-neutral-900/40 border border-white/[0.04] flex items-center justify-center text-neutral-400 shrink-0">
+              <div className="h-9 w-9 rounded-lg bg-muted border border-border flex items-center justify-center text-muted-foreground shrink-0">
                 <Fingerprint className="h-4 w-4" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] text-neutral-500 font-mono uppercase font-semibold">Grouping Fingerprint</span>
-                <span className="text-xs text-neutral-300 font-mono truncate select-all" title={log.fingerprint || "N/A"}>
+                <span className="text-[10px] text-muted-foreground font-mono uppercase font-semibold">Grouping Fingerprint</span>
+                <span className="text-xs text-foreground font-mono truncate select-all" title={log.fingerprint || "N/A"}>
                   {log.fingerprint ? log.fingerprint.slice(0, 16) + "..." : "None"}
                 </span>
               </div>

@@ -68,7 +68,7 @@ export default async function DashboardLayout({
   return (
     <div
       id="dashboard-root"
-      className="flex h-screen w-full bg-[#051424] text-on-background font-sans antialiased overflow-hidden relative selection:bg-primary-container selection:text-on-primary-container"
+      className="flex h-screen w-full bg-background text-foreground font-sans antialiased overflow-hidden relative selection:bg-primary-container selection:text-on-primary-container transition-colors duration-200"
     >
       {/* Subtle background overlay gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(0,255,156,0.015),transparent_100%)] pointer-events-none z-10" />

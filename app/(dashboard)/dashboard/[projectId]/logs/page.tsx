@@ -122,14 +122,14 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       {/* Page Title Section */}
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
-          <h2 className="font-headline-lg text-headline-lg text-primary font-bold">
-            {project.name} <span className="text-on-surface-variant font-normal">/ Logs</span>
+          <h2 className="font-headline-lg text-headline-lg text-foreground font-bold">
+            {project.name} <span className="text-muted-foreground font-normal">/ Logs</span>
           </h2>
-          <span className="px-2 py-0.5 rounded border border-[#00FF9C] text-[#00FF9C] font-label-sm text-label-sm tracking-widest font-black uppercase pulse-status leading-none">
+          <span className="px-2 py-0.5 rounded border border-emerald-500/30 dark:border-[#00FF9C]/30 text-emerald-700 dark:text-[#00FF9C] bg-emerald-50 dark:bg-emerald-950/20 font-label-sm text-label-sm tracking-widest font-semibold uppercase pulse-status leading-none">
             LIVE
           </span>
         </div>
-        <p className="text-on-surface-variant font-body-md text-body-md">
+        <p className="text-muted-foreground font-body-md text-body-md">
           Real-time event streams and structured error tracking for production environments.
         </p>
       </div>
@@ -137,39 +137,39 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       {/* Metrics Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
         {/* Total Captured */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#3b4b3f] hover:-translate-y-0.5 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Total Captured</h3>
+        <div className="bg-card border border-border p-6 rounded-lg transition-all duration-300 hover:border-primary/50 hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-tighter mb-4">Total Captured</h3>
           <div className="flex items-end justify-between">
-            <span className="font-headline-lg text-headline-lg text-primary font-black tracking-tight leading-none">{totalCount}</span>
-            <Database className="text-on-surface-variant opacity-20 h-8 w-8 shrink-0 group-hover:opacity-35 transition-opacity" />
+            <span className="font-headline-lg text-headline-lg text-foreground font-black tracking-tight leading-none">{totalCount}</span>
+            <Database className="text-muted-foreground opacity-30 h-8 w-8 shrink-0 group-hover:opacity-55 transition-opacity" />
           </div>
         </div>
 
         {/* Info Events */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-primary-container hover:-translate-y-0.5 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Info Events</h3>
+        <div className="bg-card border border-border p-6 rounded-lg transition-all duration-300 hover:border-primary/50 hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-tighter mb-4">Info Events</h3>
           <div className="flex items-end justify-between">
-            <span className="font-headline-lg text-headline-lg text-primary-container font-black tracking-tight leading-none">{infoCount}</span>
-            <div className="w-8 h-8 rounded bg-primary-container/10 flex items-center justify-center group-hover:glow-green transition-all shrink-0">
-              <Info className="text-primary-container h-5 w-5" />
+            <span className="font-headline-lg text-headline-lg text-primary font-black tracking-tight leading-none">{infoCount}</span>
+            <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center group-hover:glow-green transition-all shrink-0">
+              <Info className="text-primary h-5 w-5" />
             </div>
           </div>
         </div>
 
         {/* Warnings */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-yellow-400/50 hover:-translate-y-0.5 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Warnings</h3>
+        <div className="bg-card border border-border p-6 rounded-lg transition-all duration-300 hover:border-yellow-500/50 hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-tighter mb-4">Warnings</h3>
           <div className="flex items-end justify-between">
-            <span className="font-headline-lg text-headline-lg text-yellow-400 font-black tracking-tight leading-none">{warnCount}</span>
-            <div className="w-8 h-8 rounded bg-yellow-400/10 flex items-center justify-center group-hover:glow-yellow transition-all shrink-0">
-              <AlertTriangle className="text-yellow-400 h-5 w-5" />
+            <span className="font-headline-lg text-headline-lg text-yellow-600 dark:text-yellow-400 font-black tracking-tight leading-none">{warnCount}</span>
+            <div className="w-8 h-8 rounded bg-yellow-500/10 flex items-center justify-center group-hover:glow-yellow transition-all shrink-0">
+              <AlertTriangle className="text-yellow-600 dark:text-yellow-450 h-5 w-5" />
             </div>
           </div>
         </div>
 
         {/* Errors */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#ffb4ab] hover:-translate-y-0.5 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Errors</h3>
+        <div className="bg-card border border-border p-6 rounded-lg transition-all duration-300 hover:border-error/50 hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-muted-foreground uppercase tracking-tighter mb-4">Errors</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-error font-black tracking-tight leading-none">{errorCount}</span>
             <div className="w-8 h-8 rounded bg-error/10 flex items-center justify-center group-hover:glow-red transition-all shrink-0">
@@ -183,39 +183,39 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       <LogsFilterBar projectId={projectId} />
 
       {/* Activity Table Container */}
-      <div className="bg-[#16181D] border border-[#2D3139] rounded-lg overflow-hidden flex flex-col min-h-[400px]">
+      <div className="bg-card border border-border rounded-lg overflow-hidden flex flex-col min-h-[400px]">
         {/* Table Header */}
-        <div className="grid grid-cols-12 border-b border-[#2D3139] bg-[#1E2228]/50 shrink-0">
-          <div className="col-span-3 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Timestamp</div>
-          <div className="col-span-2 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Level</div>
-          <div className="col-span-5 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Message</div>
-          <div className="col-span-2 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase text-right pr-6">Source</div>
+        <div className="grid grid-cols-12 border-b border-border bg-muted/40 shrink-0">
+          <div className="col-span-3 p-4 font-label-sm text-label-sm text-muted-foreground uppercase">Timestamp</div>
+          <div className="col-span-2 p-4 font-label-sm text-label-sm text-muted-foreground uppercase">Level</div>
+          <div className="col-span-5 p-4 font-label-sm text-label-sm text-muted-foreground uppercase">Message</div>
+          <div className="col-span-2 p-4 font-label-sm text-label-sm text-muted-foreground uppercase text-right pr-6">Source</div>
         </div>
 
         {/* Table Body */}
-        <div className="flex-1 flex flex-col divide-y divide-[#2D3139]/40">
+        <div className="flex-1 flex flex-col divide-y divide-border/40">
           {displayedLogs.length === 0 ? (
             /* Empty State */
             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center my-auto">
-              <div className="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-6 relative border border-outline-variant">
-                <div className="absolute inset-0 rounded-full border border-primary-container/20 animate-ping"></div>
-                <Terminal className="h-8 w-8 text-primary-container animate-pulse" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6 relative border border-border">
+                <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping"></div>
+                <Terminal className="h-8 w-8 text-primary animate-pulse" />
               </div>
-              <h4 className="font-headline-sm text-headline-sm text-primary mb-2 font-bold">No activity detected</h4>
-              <p className="font-body-md text-body-md text-on-surface-variant max-w-sm leading-relaxed">
+              <h4 className="font-headline-sm text-headline-sm text-foreground mb-2 font-bold">No activity detected</h4>
+              <p className="font-body-md text-body-md text-muted-foreground max-w-sm leading-relaxed">
                 No events or matching logs recorded in this period. Adjust your filters or wait for incoming data packets.
               </p>
               <div className="mt-8 flex gap-4">
                 <Link
                   href="https://github.com/Nur-Adnan/DevTools"
                   target="_blank"
-                  className="px-6 py-2 border border-[#2D3139] rounded font-label-md text-label-md hover:bg-[#1A1D21] transition-colors text-xs text-on-surface-variant hover:text-white flex items-center justify-center"
+                  className="px-6 py-2 border border-border rounded font-label-md text-label-md hover:bg-muted transition-colors text-xs text-muted-foreground hover:text-foreground flex items-center justify-center"
                 >
                   Documentation
                 </Link>
                 <Link
                   href={`/dashboard/${projectId}/logs`}
-                  className="px-6 py-2 bg-primary-container text-on-primary-container rounded font-label-md text-label-md font-bold hover:brightness-110 transition-all text-xs flex items-center justify-center"
+                  className="px-6 py-2 bg-primary text-primary-foreground rounded font-label-md text-label-md font-bold hover:opacity-90 transition-all text-xs flex items-center justify-center"
                 >
                   Refresh View
                 </Link>
@@ -226,20 +226,20 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
               let badge;
               if (log.type === "ERROR") {
                 badge = (
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-400 font-mono text-[9px] font-bold">
-                    <XCircle className="h-3 w-3 shrink-0" /> ERROR
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-450 font-mono text-[9px] font-bold leading-none">
+                    <XCircle className="h-3.5 w-3.5 shrink-0" /> ERROR
                   </span>
                 );
               } else if (log.type === "WARN") {
                 badge = (
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-yellow-400 font-mono text-[9px] font-bold">
-                    <AlertTriangle className="h-3 w-3 shrink-0" /> WARN
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-yellow-200 dark:border-yellow-500/20 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-800 dark:text-yellow-400 font-mono text-[9px] font-bold leading-none">
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" /> WARN
                   </span>
                 );
               } else {
                 badge = (
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-primary-container/20 bg-primary-container/10 text-primary-container font-mono text-[9px] font-bold">
-                    <CheckCircle2 className="h-3 w-3 shrink-0" /> INFO
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-mono text-[9px] font-bold leading-none">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0" /> INFO
                   </span>
                 );
               }
@@ -250,10 +250,10 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
                 <Link
                   key={log.id}
                   href={`/dashboard/${projectId}/logs/${log.id}`}
-                  className="grid grid-cols-12 hover:bg-[#1A1D21]/30 transition-all duration-200 items-center text-xs font-mono font-light text-neutral-350 border-none group cursor-pointer"
+                  className="grid grid-cols-12 hover:bg-muted/40 transition-all duration-200 items-center text-xs font-mono text-muted-foreground border-none group cursor-pointer"
                 >
                   {/* Timestamp */}
-                  <div className="col-span-3 p-4 font-mono text-neutral-400 group-hover:text-primary transition-colors">
+                  <div className="col-span-3 p-4 font-mono text-muted-foreground group-hover:text-primary transition-colors">
                     {new Date(log.createdAt).toLocaleString(undefined, {
                       month: "short",
                       day: "2-digit",
@@ -270,12 +270,12 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
                   </div>
 
                   {/* Message */}
-                  <div className="col-span-5 p-4 truncate pr-4 font-sans text-neutral-200 group-hover:text-white transition-colors">
+                  <div className="col-span-5 p-4 truncate pr-4 font-sans text-foreground/90 group-hover:text-foreground transition-colors">
                     {log.message}
                   </div>
 
                   {/* Source */}
-                  <div className="col-span-2 p-4 text-right pr-6 font-mono text-neutral-400 group-hover:text-neutral-300 transition-colors truncate max-w-full">
+                  <div className="col-span-2 p-4 text-right pr-6 font-mono text-muted-foreground group-hover:text-foreground transition-colors truncate max-w-full">
                     {sourceLabel}
                   </div>
                 </Link>
@@ -298,7 +298,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
                   ...(search ? { search } : {}),
                 },
               }}
-              className={buttonVariants({ variant: "outline", size: "sm" }) + " bg-neutral-900/40 border-neutral-800 text-xs text-neutral-400 hover:text-white hover:bg-neutral-800/60"}
+              className={buttonVariants({ variant: "outline", size: "sm" }) + " bg-card border-border text-xs text-muted-foreground hover:text-foreground hover:bg-muted"}
             >
               Back to First Page
             </Link>
@@ -317,7 +317,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
                   cursor: nextCursor,
                 },
               }}
-              className={buttonVariants({ variant: "outline", size: "sm" }) + " bg-neutral-900/40 border-neutral-800 text-xs text-neutral-400 hover:text-white hover:bg-neutral-800/60"}
+              className={buttonVariants({ variant: "outline", size: "sm" }) + " bg-card border-border text-xs text-muted-foreground hover:text-foreground hover:bg-muted"}
             >
               Next Page
               <ChevronRight className="h-4 w-4 ml-1" />
@@ -327,24 +327,24 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       </div>
 
       {/* Bottom Footer Metrics */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 border-t border-outline-variant/30 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 border-t border-border gap-4">
         <div className="flex gap-8">
           <div>
-            <span className="font-label-sm text-label-sm text-on-surface-variant block mb-1 font-mono">DATA INGESTION</span>
+            <span className="font-label-sm text-label-sm text-muted-foreground block mb-1 font-mono">DATA INGESTION</span>
             <span className="font-label-md text-label-md text-primary font-mono font-bold">
               {displayedLogs.length > 0 ? "0.48 KB/s" : "0.00 KB/s"}
             </span>
           </div>
           <div>
-            <span className="font-label-sm text-label-sm text-on-surface-variant block mb-1 font-mono">LATENCY</span>
+            <span className="font-label-sm text-label-sm text-muted-foreground block mb-1 font-mono">LATENCY</span>
             <span className="font-label-md text-label-md text-primary font-mono font-bold">12ms</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="h-1.5 w-32 bg-[#1A1D21] rounded-full overflow-hidden border border-[#2D3139]/40">
-            <div className="h-full w-1/3 bg-primary-container animate-pulse"></div>
+          <div className="h-1.5 w-32 bg-muted rounded-full overflow-hidden border border-border/40">
+            <div className="h-full w-1/3 bg-primary animate-pulse"></div>
           </div>
-          <span className="font-label-sm text-label-sm text-on-surface-variant font-mono">NODE: US-EAST-1</span>
+          <span className="font-label-sm text-label-sm text-muted-foreground font-mono">NODE: US-EAST-1</span>
         </div>
       </div>
     </div>

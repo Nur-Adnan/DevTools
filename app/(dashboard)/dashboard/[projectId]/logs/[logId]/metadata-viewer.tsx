@@ -12,7 +12,7 @@ export function MetadataViewer({ metadata }: MetadataViewerProps) {
 
   if (!metadata || (typeof metadata === "object" && Object.keys(metadata as Record<string, unknown>).length === 0)) {
     return (
-      <div className="text-neutral-500 font-mono text-xs italic bg-neutral-900/40 p-4 border border-white/[0.04] rounded-lg">
+      <div className="text-muted-foreground font-mono text-xs italic bg-muted/40 p-4 border border-border rounded-lg">
         No custom metadata recorded for this log event.
       </div>
     );
@@ -25,20 +25,20 @@ export function MetadataViewer({ metadata }: MetadataViewerProps) {
   };
 
   return (
-    <div className="bg-neutral-900/40 border border-white/[0.04] rounded-xl overflow-hidden backdrop-blur-md">
-      <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-950/40 border-b border-white/[0.04]">
-        <div className="flex items-center gap-2 text-xs font-mono text-neutral-300">
+    <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-muted/30 border-b border-border">
+        <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
           <Braces className="h-4 w-4 text-primary" />
           <span>STRUCTURED METADATA</span>
         </div>
         <button
           onClick={handleCopy}
-          className="inline-flex h-7 px-2.5 items-center gap-1.5 rounded-lg border border-white/[0.04] bg-neutral-900/60 hover:bg-neutral-800 transition-all text-[10px] text-neutral-400 hover:text-white font-mono"
+          className="inline-flex h-7 px-2.5 items-center gap-1.5 rounded-lg border border-border bg-background hover:bg-muted transition-all text-[10px] text-muted-foreground hover:text-foreground font-mono"
         >
           {copied ? (
             <>
-              <Check className="h-3 w-3 text-emerald-400" />
-              <span className="text-emerald-400">COPIED</span>
+              <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-emerald-600 dark:text-emerald-400">COPIED</span>
             </>
           ) : (
             <>
@@ -49,7 +49,7 @@ export function MetadataViewer({ metadata }: MetadataViewerProps) {
         </button>
       </div>
 
-      <div className="p-5 font-mono text-xs overflow-x-auto select-text text-neutral-300">
+      <div className="p-5 font-mono text-xs overflow-x-auto select-text text-foreground bg-muted/10">
         <JSONNode value={metadata} isLast={true} />
       </div>
     </div>
@@ -69,7 +69,7 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
 
   const renderLabel = () => {
     if (!label) return null;
-    return <span className="text-indigo-400 font-semibold mr-1.5">&quot;{label}&quot;:</span>;
+    return <span className="text-indigo-650 dark:text-indigo-400 font-semibold mr-1.5">&quot;{label}&quot;:</span>;
   };
 
   // 1. Array type
@@ -78,8 +78,8 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
       return (
         <div className="pl-4">
           {renderLabel()}
-          <span className="text-neutral-500">[]</span>
-          {!isLast && <span className="text-neutral-500">,</span>}
+          <span className="text-muted-foreground">[]</span>
+          {!isLast && <span className="text-muted-foreground">,</span>}
         </div>
       );
     }
@@ -87,17 +87,17 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
     return (
       <div className="pl-4">
         <div className="flex items-center group/node cursor-pointer -ml-4" onClick={toggleOpen}>
-          <span className="text-neutral-600 group-hover/node:text-neutral-400 transition-colors">
+          <span className="text-muted-foreground/60 group-hover/node:text-muted-foreground transition-colors mr-1">
             {isOpen ? <ChevronDown className="h-3.5 w-3.5 shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0" />}
           </span>
           {renderLabel()}
-          <span className="text-neutral-500 font-medium">Array({value.length}) [</span>
-          {!isOpen && <span className="text-neutral-500"> ... ]{!isLast && ","}</span>}
+          <span className="text-muted-foreground font-medium">Array({value.length}) [</span>
+          {!isOpen && <span className="text-muted-foreground"> ... ]{!isLast && ","}</span>}
         </div>
         
         {isOpen && (
           <>
-            <div className="border-l border-white/[0.04] ml-[-8px] pl-4 my-1 space-y-1">
+            <div className="border-l border-border ml-[-8px] pl-4 my-1 space-y-1">
               {value.map((item, idx) => (
                 <JSONNode 
                   key={idx} 
@@ -107,7 +107,7 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
                 />
               ))}
             </div>
-            <div className="text-neutral-500">]{!isLast && ","}</div>
+            <div className="text-muted-foreground">]{!isLast && ","}</div>
           </>
         )}
       </div>
@@ -122,8 +122,8 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
       return (
         <div className="pl-4">
           {renderLabel()}
-          <span className="text-neutral-500">{"{}"}</span>
-          {!isLast && <span className="text-neutral-500">,</span>}
+          <span className="text-muted-foreground">{"{}"}</span>
+          {!isLast && <span className="text-muted-foreground">,</span>}
         </div>
       );
     }
@@ -131,17 +131,17 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
     return (
       <div className="pl-4">
         <div className="flex items-center group/node cursor-pointer -ml-4" onClick={toggleOpen}>
-          <span className="text-neutral-600 group-hover/node:text-neutral-400 transition-colors">
+          <span className="text-muted-foreground/60 group-hover/node:text-muted-foreground transition-colors mr-1">
             {isOpen ? <ChevronDown className="h-3.5 w-3.5 shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0" />}
           </span>
           {renderLabel()}
-          <span className="text-neutral-500 font-medium">Object {"{"}</span>
-          {!isOpen && <span className="text-neutral-500"> ... {"}"}{!isLast && ","}</span>}
+          <span className="text-muted-foreground font-medium">Object {"{"}</span>
+          {!isOpen && <span className="text-muted-foreground"> ... {"}"}{!isLast && ","}</span>}
         </div>
 
         {isOpen && (
           <>
-            <div className="border-l border-white/[0.04] ml-[-8px] pl-4 my-1 space-y-1">
+            <div className="border-l border-border ml-[-8px] pl-4 my-1 space-y-1">
               {keys.map((key, idx) => (
                 <JSONNode 
                   key={key} 
@@ -151,7 +151,7 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
                 />
               ))}
             </div>
-            <div className="text-neutral-500">{"}"}{!isLast && ","}</div>
+            <div className="text-muted-foreground">{"}"}{!isLast && ","}</div>
           </>
         )}
       </div>
@@ -163,21 +163,21 @@ function JSONNode({ label, value, isLast }: JSONNodeProps) {
     <div className="pl-4">
       {renderLabel()}
       {typeof value === "string" && (
-        <span className="text-emerald-400 font-medium break-all">&quot;{value}&quot;</span>
+        <span className="text-emerald-700 dark:text-emerald-400 font-medium break-all">&quot;{value}&quot;</span>
       )}
       {typeof value === "number" && (
-        <span className="text-amber-400 font-medium">{value}</span>
+        <span className="text-amber-600 dark:text-amber-400 font-medium">{value}</span>
       )}
       {typeof value === "boolean" && (
-        <span className="text-sky-400 font-bold">{String(value)}</span>
+        <span className="text-sky-600 dark:text-sky-400 font-bold">{String(value)}</span>
       )}
       {value === null && (
-        <span className="text-neutral-500 font-semibold italic">null</span>
+        <span className="text-muted-foreground font-semibold italic">null</span>
       )}
       {value === undefined && (
-        <span className="text-neutral-500 font-semibold italic">undefined</span>
+        <span className="text-muted-foreground font-semibold italic">undefined</span>
       )}
-      {!isLast && <span className="text-neutral-500">,</span>}
+      {!isLast && <span className="text-muted-foreground">,</span>}
     </div>
   );
 }
