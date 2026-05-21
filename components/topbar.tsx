@@ -40,7 +40,7 @@ export function Topbar({ projects = [], activeProjectId }: TopbarProps) {
   };
 
   return (
-    <header className="fixed top-0 right-0 left-64 z-40 flex h-16 items-center justify-between border-b border-outline-variant bg-surface px-6 backdrop-blur-md bg-surface/90">
+    <header className="flex justify-between items-center w-full px-margin-desktop bg-surface h-16 border-b border-outline-variant shrink-0 z-50">
       {/* Project Switcher & Copyable Project ID Badge */}
       <div className="flex items-center gap-4">
         {projects.length > 0 ? (

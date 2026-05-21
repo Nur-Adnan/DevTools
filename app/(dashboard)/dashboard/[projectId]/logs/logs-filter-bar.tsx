@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, RotateCcw, Loader2 } from "lucide-react";
+import { Search, RotateCcw, Loader2, ListFilter } from "lucide-react";
 
 interface LogsFilterBarProps {
   projectId: string;
@@ -151,13 +151,13 @@ export function LogsFilterBar({ projectId }: LogsFilterBarProps) {
           <Button
             type="submit"
             size="sm"
-            className="h-9 px-6 bg-surface-container-highest border border-outline-variant hover:bg-surface-container-high text-xs font-bold gap-2 text-on-background hover:text-white rounded transition-colors"
+            className="h-9 px-6 bg-surface-container-highest border border-outline-variant hover:bg-surface-variant text-xs font-bold gap-2 text-on-background hover:text-white rounded transition-colors flex items-center"
             disabled={isPending}
           >
             {isPending ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
-              <Search className="h-3.5 w-3.5 text-[#00ff9c]" />
+              <ListFilter className="h-4 w-4 text-[#00ff9c]" />
             )}
             Search
           </Button>

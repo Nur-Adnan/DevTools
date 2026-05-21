@@ -43,7 +43,7 @@ export function Sidebar() {
   const router = useRouter();
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 bg-surface-container-low border-r border-outline-variant z-30">
+    <aside className="flex flex-col h-full py-margin-desktop bg-surface-container-low w-64 flex-shrink-0 border-r border-outline-variant z-30">
       {/* Brand Header */}
       <div className="px-6 mb-10 flex items-center gap-3">
         <div className="w-8 h-8 bg-primary-container rounded flex items-center justify-center">

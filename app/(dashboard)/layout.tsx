@@ -68,27 +68,27 @@ export default async function DashboardLayout({
   return (
     <div
       id="dashboard-root"
-      className="min-h-screen bg-background text-on-background font-sans antialiased relative selection:bg-primary-container selection:text-on-primary-container"
+      className="flex h-screen w-full bg-[#051424] text-on-background font-sans antialiased overflow-hidden relative selection:bg-primary-container selection:text-on-primary-container"
     >
       {/* Subtle background overlay gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(0,255,156,0.015),transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(0,255,156,0.015),transparent_100%)] pointer-events-none z-10" />
 
       {/* Dashboard sidebar shell */}
       <Sidebar />
 
-      {/* Main Dashboard shell */}
-      <div className="pl-64 flex flex-col min-h-screen bg-surface-container-lowest">
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col overflow-hidden terminal-grid relative z-20">
         {/* Dashboard topbar menu - passes projects list and active selected ID */}
         <Topbar
           projects={projects.map((p) => ({ id: p.id, name: p.name }))}
           activeProjectId={activeProjectId}
         />
 
-        {/* Dashboard actual pages rendering */}
-        <main className="flex-1 pt-16 p-8 relative z-0 custom-scrollbar overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-8">{children}</div>
-        </main>
-      </div>
+        {/* Scrollable Canvas for child pages */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="max-w-7xl mx-auto p-margin-desktop space-y-6">{children}</div>
+        </div>
+      </main>
     </div>
   );
 }

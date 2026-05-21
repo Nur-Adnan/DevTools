@@ -118,9 +118,9 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
   const nextCursor = hasNextPage ? displayedLogs[displayedLogs.length - 1].id : null;
 
   return (
-    <div className="space-y-8 animate-fade-in terminal-grid p-margin-desktop min-h-screen rounded-xl border border-outline-variant/30 bg-[#051424]">
+    <div className="space-y-6 animate-fade-in">
       {/* Page Title Section */}
-      <div className="flex flex-col gap-1 pb-6 border-b border-outline-variant/30">
+      <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
           <h2 className="font-headline-lg text-headline-lg text-primary font-bold">
             {project.name} <span className="text-on-surface-variant font-normal">/ Logs</span>
@@ -137,8 +137,8 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       {/* Metrics Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
         {/* Total Captured */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#3b4b3f] hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Total Captured</h3>
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#3b4b3f] hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Total Captured</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-primary font-black tracking-tight leading-none">{totalCount}</span>
             <Database className="text-on-surface-variant opacity-20 h-8 w-8 shrink-0 group-hover:opacity-35 transition-opacity" />
@@ -146,8 +146,8 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Info Events */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-primary-container hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Info Events</h3>
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-primary-container hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Info Events</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-primary-container font-black tracking-tight leading-none">{infoCount}</span>
             <div className="w-8 h-8 rounded bg-primary-container/10 flex items-center justify-center group-hover:glow-green transition-all shrink-0">
@@ -157,8 +157,8 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Warnings */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-yellow-400/50 hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Warnings</h3>
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-yellow-400/50 hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Warnings</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-yellow-400 font-black tracking-tight leading-none">{warnCount}</span>
             <div className="w-8 h-8 rounded bg-yellow-400/10 flex items-center justify-center group-hover:glow-yellow transition-all shrink-0">
@@ -168,8 +168,8 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
         </div>
 
         {/* Errors */}
-        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#ffb4ab] hover:-translate-y-0.5 flex flex-col justify-between h-32 group">
-          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-mono font-bold">Errors</h3>
+        <div className="bg-[#16181D] border border-[#2D3139] p-6 rounded-lg transition-all duration-300 hover:border-[#ffb4ab] hover:-translate-y-0.5 group">
+          <h3 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter mb-4">Errors</h3>
           <div className="flex items-end justify-between">
             <span className="font-headline-lg text-headline-lg text-error font-black tracking-tight leading-none">{errorCount}</span>
             <div className="w-8 h-8 rounded bg-error/10 flex items-center justify-center group-hover:glow-red transition-all shrink-0">
@@ -185,11 +185,11 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
       {/* Activity Table Container */}
       <div className="bg-[#16181D] border border-[#2D3139] rounded-lg overflow-hidden flex flex-col min-h-[400px]">
         {/* Table Header */}
-        <div className="grid grid-cols-12 border-b border-[#2D3139] bg-[#1E2228]/50 text-on-surface-variant font-mono font-bold text-[10px] tracking-wider uppercase shrink-0">
-          <div className="col-span-3 p-4">Timestamp</div>
-          <div className="col-span-2 p-4">Level</div>
-          <div className="col-span-5 p-4">Message</div>
-          <div className="col-span-2 p-4 text-right pr-6">Source</div>
+        <div className="grid grid-cols-12 border-b border-[#2D3139] bg-[#1E2228]/50 shrink-0">
+          <div className="col-span-3 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Timestamp</div>
+          <div className="col-span-2 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Level</div>
+          <div className="col-span-5 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Message</div>
+          <div className="col-span-2 p-4 font-label-sm text-label-sm text-on-surface-variant uppercase text-right pr-6">Source</div>
         </div>
 
         {/* Table Body */}
