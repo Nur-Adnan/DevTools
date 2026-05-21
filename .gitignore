@@ -38,3 +38,10 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# Packages & recursive builds
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+
