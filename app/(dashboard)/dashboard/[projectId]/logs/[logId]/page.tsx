@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { 
   ArrowLeft, 
@@ -40,7 +40,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
   });
 
   if (!project) {
-    redirect("/dashboard");
+    notFound();
   }
 
   // 2. Fetch log entry
@@ -52,7 +52,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
   });
 
   if (!log) {
-    redirect(`/dashboard/${projectId}/logs`);
+    notFound();
   }
 
   // 3. Render type-specific header card styling

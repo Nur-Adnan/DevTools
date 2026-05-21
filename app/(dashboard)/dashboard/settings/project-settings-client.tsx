@@ -159,8 +159,8 @@ export function ProjectSettingsClient({ activeProject }: ProjectSettingsClientPr
     }
   };
 
-  const maskSuffix = activeProject.id.slice(0, 4);
-  const maskedKey = `pg_live_••••••••••••${maskSuffix}`;
+  const maskSuffix = activeProject.id.slice(-6);
+  const maskedKey = `••••••••••••${maskSuffix}`;
 
   return (
     <div className="space-y-6">
@@ -308,7 +308,7 @@ export function ProjectSettingsClient({ activeProject }: ProjectSettingsClientPr
 
       {/* dialog regeneration popup */}
       <Dialog open={isRegenOpen} onOpenChange={handleCloseRegen}>
-        <DialogContent className="bg-card border-border text-foreground rounded-xl shadow-2xl max-w-md p-6 overflow-hidden">
+        <DialogContent className="sm:max-w-md">
           
           {!generatedKey ? (
             // Phase 1: Invalidation Confirmation
@@ -432,7 +432,7 @@ export function ProjectSettingsClient({ activeProject }: ProjectSettingsClientPr
 
       {/* dialog delete popup */}
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="bg-card border-border text-foreground rounded-xl shadow-2xl max-w-md p-6 overflow-hidden">
+        <DialogContent className="sm:max-w-md">
           <div className="space-y-4">
             <DialogHeader>
               <DialogTitle className="text-lg font-bold text-foreground flex items-center gap-2">

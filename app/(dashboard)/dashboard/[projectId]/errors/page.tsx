@@ -229,19 +229,13 @@ export default async function ProjectErrorsPage({ params, searchParams }: PagePr
                         {/* Error Message & Fingerprint */}
                         <TableCell className="max-w-md">
                           <div className="flex flex-col gap-1">
-                            {group.sampleLogId ? (
-                              <Link
-                                href={`/dashboard/${projectId}/logs/${group.sampleLogId}`}
-                                className="font-semibold text-foreground hover:text-primary transition-colors text-sm truncate block"
-                                title={group.message}
-                              >
-                                {group.message}
-                              </Link>
-                            ) : (
-                              <span className="font-semibold text-foreground text-sm truncate" title={group.message}>
-                                {group.message}
-                              </span>
-                            )}
+                            <Link
+                              href={`/dashboard/${projectId}/logs?fingerprint=${group.fingerprint}`}
+                              className="font-semibold text-foreground hover:text-primary transition-colors text-sm truncate block"
+                              title={group.message}
+                            >
+                              {group.message}
+                            </Link>
                             <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
                               <span>FINGERPRINT:</span>
                               <span className="select-all text-muted-foreground/80 truncate w-32 font-bold" title={group.fingerprint}>

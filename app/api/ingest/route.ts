@@ -61,6 +61,7 @@ export async function POST(req: Request) {
                 "X-RateLimit-Limit": limit.toString(),
                 "X-RateLimit-Remaining": remaining.toString(),
                 "X-RateLimit-Reset": reset.toString(),
+                "Retry-After": "60",
               },
             }
           );
@@ -174,7 +175,7 @@ export async function POST(req: Request) {
 
     // 6. Compute SHA256 Fingerprint for error grouping
     const firstLineOfStack = stackTrace ? stackTrace.trim().split("\n")[0] || "" : "";
-    const fingerprintInput = `${type}${message}${firstLineOfStack}`;
+    const fingerprintInput = `${type}:${message}:${firstLineOfStack}`;
     const fingerprint = crypto
       .createHash("sha256")
       .update(fingerprintInput)

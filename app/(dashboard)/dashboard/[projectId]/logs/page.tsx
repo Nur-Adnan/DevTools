@@ -25,12 +25,13 @@ interface PageProps {
     range?: string;
     search?: string;
     cursor?: string;
+    fingerprint?: string;
   };
 }
 
 export default async function ProjectLogsPage({ params, searchParams }: PageProps) {
   const { projectId } = params;
-  const { type, range, search, cursor } = searchParams;
+  const { type, range, search, cursor, fingerprint } = searchParams;
 
   const { userId } = await auth();
   if (!userId) {
@@ -70,6 +71,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
     projectId,
     ...(typeFilter ? { type: typeFilter } : {}),
     ...(timeFilter ? { createdAt: { gte: timeFilter } } : {}),
+    ...(fingerprint ? { fingerprint } : {}),
     ...(search
       ? {
           message: {
@@ -271,7 +273,7 @@ export default async function ProjectLogsPage({ params, searchParams }: PageProp
 
                   {/* Message */}
                   <div className="col-span-5 p-4 truncate pr-4 font-sans text-foreground/90 group-hover:text-foreground transition-colors">
-                    {log.message}
+                    {log.message.length > 80 ? log.message.substring(0, 80) + "..." : log.message}
                   </div>
 
                   {/* Source */}
