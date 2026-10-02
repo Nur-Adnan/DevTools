@@ -7,7 +7,7 @@ PulseGuard is a premium, high-performance, developer-first logging and exception
 ## 🚀 Key Features
 
 - **⚡ Zero-Overhead Ingestion**: High-capacity endpoint `/api/ingest` designed to handle high-frequency telemetry logging with minimal latency.
-- **📦 Modular SDK (`@yourapp/logger-sdk`)**: Standard JavaScript/TypeScript client library featuring asynchronous, fire-and-forget logging and automatic trace slicing.
+- **📦 Modular SDK (`@pulseguard/sdk`)**: Standard JavaScript/TypeScript client library featuring asynchronous, fire-and-forget logging and automatic trace slicing.
 - **🧩 Structured Metadata Tree Viewer**: Interactive, color-coded collapsible JSON viewer to inspect complex metadata nodes seamlessly.
 - **🧬 Error Fingerprinting & Grouping**: Smart SHA256 grouping algorithms that automatically cluster duplicate errors by signature and stack location.
 - **🔑 Cryptographic Key Lifecycle**: Secure API keys generated securely via cryptographically random bytes, stored as strong Bcrypt hashes, and managed through settings (regenerate, delete).
@@ -32,7 +32,7 @@ PulseGuard is a premium, high-performance, developer-first logging and exception
 ```
                       ┌────────────────────────────────────────┐
                       │            Target Node App             │
-                      │       (imports @yourapp/logger-sdk)     │
+                      │       (imports @pulseguard/sdk)     │
                       └───────────────────┬────────────────────┘
                                           │ (Async Fire-and-Forget)
                                           ▼
@@ -120,7 +120,7 @@ npm run build
 ### Quickstart
 
 ```typescript
-import { createLogger } from '@yourapp/logger-sdk';
+import { createLogger } from '@pulseguard/sdk';
 
 // Initialize the client
 const logger = createLogger({
